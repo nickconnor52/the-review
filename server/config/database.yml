@@ -3,6 +3,8 @@ default: &default
   encoding: utf8
   host: localhost
   port: 5432
+  username: <%= ENV['DB_USERNAME'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
 
 development:
   <<: *default
@@ -21,11 +23,3 @@ test:
   port: <%= ENV['TEST_DB_PORT'] %>
   username: <%= ENV['TEST_DB_USERNAME'] %>
   password: <%= ENV['TEST_DB_PASSWORD'] %>
-
-development:
-  <<: *default
-  database: <%= ENV['DEV_DB_NAME'] %>
-  port: <%= ENV['DEV_DB_PORT'] %>
-  username: <%= ENV['DEV_DB_USERNAME'] %>
-  password: <%= ENV['DEV_DB_PASSWORD'] %>
-  # host: <%= ENV['DEV_DB_ENDPOINT'] %>
