@@ -1,64 +1,83 @@
-import React from "react";
+import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
-} from "react-router-dom";
+} from 'react-router-dom';
+import styled from 'styled-components';
+import { colors } from './core/colors';
 
-import Owners from "./components/owners/Owners"
-import Posts from "./components/posts/Posts"
-import EditPosts from "./components/posts/EditPosts"
+import NavigationBar from './components/NavigationBar';
+import Owners from './components/owners/Owners';
+import PostsDirectory from './components/posts/PostsDirectory';
+import Post from './components/posts/Post';
+import PostEditor from './components/posts/PostEditor';
+
+const PageBody = styled.div`
+  background-color: ${colors.lightGrey};
+  min-height: 100%;
+`
 
 export default function App() {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/owners">Owners</Link>
-            </li>
-            <li>
-              <Link to="/posts">Ramblings</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-          </ul>
-        </nav>
-
+      <PageBody>
+        <NavigationBar />
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          <Route path="/owners">
-            <Owners />
-          </Route>
-          <Route path="/about">
-            <About />
-          </Route>
-          <Route path="/posts/edit">
-            <EditPosts />
-          </Route>
-          <Route path="/posts">
-            <Posts />
-          </Route>
-          <Route path="/">
-            <Home />
-          </Route>
-        </Switch>
-      </div>
+          <Switch>
+            <Route path='/owners'>
+              <Owners />
+            </Route>
+            <Route path='/posts/edit'>
+              <PostEditor />
+            </Route>
+            <Route path='/posts/:id/edit'>
+              <PostEditor />
+            </Route>
+            <Route path='/posts/:id'>
+              <Post />
+            </Route>
+            <Route path='/posts'>
+              <PostsDirectory />
+            </Route>
+            <Route path='/'>
+              <Home />
+            </Route>
+          </Switch>
+      </PageBody>
     </Router>
   );
 }
 
-function Home() {
-  return <h2>Home</h2>;
-}
+const HomeContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2em;
+`
 
-function About() {
-  return <h2>About</h2>;
+const Title = styled.div`
+  font-size: 1.5em;
+  font-weight: 600;
+  text-align: center;
+`
+
+const Body = styled.div`
+  width: 60%;
+  margin-top: 1em;
+`
+
+function Home() {
+  return (
+    <HomeContainer>
+      <Title>
+        Welcome to The League Review
+      </Title>
+      <Body>
+        It's gonna look pretty bare in here for a while, but I'm working on it. At a bare minimum, check back each week to read
+        my latest ramblings about your team, my team, and everything in between. I'll keep y'all posted as things move along.
+      </Body>
+    </HomeContainer>
+  );
 }
