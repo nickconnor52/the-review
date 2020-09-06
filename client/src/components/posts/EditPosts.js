@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
+import { useHistory } from 'react-router-dom'
 
 import { createPost } from './api';
 
@@ -56,9 +57,12 @@ function EditPosts() {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [selectedTab, setSelectedTab] = useState("write");
+  const history = useHistory();
 
   const onSave = () => {
-    createPost({ title, content })
+    createPost({ title, content }).then(() => {
+      history.push('/posts')
+    })
   }
 
   return (
