@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
+import { isUndefined } from 'lodash'
 
-import { createPost } from './api';
+import { createPost, getPost, updatePost, deletePost } from './api';
 
 import ReactMde from 'react-mde';
 import ReactMarkdown from 'react-markdown';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 const EditContainer = styled.div`
+  margin-top: 2em;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -39,7 +41,7 @@ const Button = styled.a`
   margin: 0.5rem 1rem;
   width: 6em;
   background: transparent;
-  color: white;
+  color: #444444;
   border: 2px solid #444444;
   cursor: pointer;
 
@@ -53,17 +55,42 @@ const inlineStyle = {
   width: '60%',
 };
 
-function EditPosts() {
+function PostEditor() {
+  const { id } = useParams();
+  const isNew = isUndefined(id);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [selectedTab, setSelectedTab] = useState("write");
   const history = useHistory();
 
-  const onSave = () => {
-    createPost({ title, content }).then(() => {
-      history.push('/posts')
-    })
+  const onDelete = () => {
+    if (window.confirm('You serious Clark??')) {
+      deletePost({id}).then(() => {
+        history.push(`/posts`)
+      })
+    }
   }
+
+  const onSave = () => {
+    if (isNew) {
+      createPost({ title, content }).then((post) => {
+        history.push(`/posts/${post.id}`)
+      });
+    } else {
+      updatePost({ title, content, id}).then((post) => {
+        history.push(`/posts/${id}`)
+      })
+    }
+  }
+
+  useEffect(() => {
+    if (!isNew) {
+      getPost(id).then(post => {
+        setContent(post.content)
+        setTitle(post.title)
+      })
+    }
+  }, []);
 
   return (
     <EditContainer>
@@ -84,6 +111,11 @@ function EditPosts() {
       </div>
       <ButtonContainer>
         <Button
+          onClick={onDelete}
+        >
+          Delete
+        </Button>
+        <Button
           primary
           onClick={onSave}
         >
@@ -94,4 +126,4 @@ function EditPosts() {
   );
 }
 
-export default EditPosts;
+export default PostEditor;
