@@ -6,7 +6,9 @@ import {
   Link
 } from "react-router-dom";
 
-import Owners from "./components/Owners"
+import Owners from "./components/owners/Owners"
+import Posts from "./components/posts/Posts"
+import EditPosts from "./components/posts/EditPosts"
 
 export default function App() {
   return (
@@ -19,6 +21,9 @@ export default function App() {
             </li>
             <li>
               <Link to="/owners">Owners</Link>
+            </li>
+            <li>
+              <Link to="/posts">Ramblings</Link>
             </li>
             <li>
               <Link to="/about">About</Link>
@@ -34,6 +39,12 @@ export default function App() {
           </Route>
           <Route path="/about">
             <About />
+          </Route>
+          <Route path="/posts/edit">
+            <EditPosts />
+          </Route>
+          <Route path="/posts">
+            <Posts />
           </Route>
           <Route path="/">
             <Home />
