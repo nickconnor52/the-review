@@ -1,10 +1,15 @@
 class PostsController < ApplicationController
   before_action :create_post, only: [:create]
+  before_action :find_post, only: [:show, :update, :destroy]
 
   def index
     posts = Post.all.order :created_at
 
-    render :json => posts
+    render :json => posts, :include => [:user]
+  end
+
+  def show
+    render :json => @post, :include => [:user]
   end
 
   def create
@@ -12,9 +17,17 @@ class PostsController < ApplicationController
   end
 
   def update
-    post = Post.new()
+    @post.content = post_params[:content]
+    @post.title = post_params[:title] unless post_params[:title].blank?
+    @post.save!
 
-    render :json => post
+    render :json => @post
+  end
+
+  def destroy
+    successful = @post.destroy
+
+    render :json => { success: successful }
   end
 
   private
@@ -25,7 +38,11 @@ class PostsController < ApplicationController
     @post.save!
   end
 
+  def find_post
+    @post = Post.find(post_params[:id])
+  end
+
   def post_params
-    params.permit(:title, :content)
+    params.permit(:id, :title, :content)
   end
 end
