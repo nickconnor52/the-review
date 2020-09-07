@@ -18,8 +18,8 @@ import 'github-markdown-css';
 import axios from 'axios';
 
 if (process.env.NODE_ENV === 'production') {
-  console.log(process.env.API_BASE_URL)
-  axios.defaults.baseURL = process.env.API_BASE_URL || ''
+  console.log(process.env.REACT_APP_API_BASE_URL)
+  axios.defaults.baseURL = process.env.REACT_APP_API_BASE_URL || ''
 }
 
 const PageBody = styled.div`

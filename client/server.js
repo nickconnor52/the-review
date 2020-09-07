@@ -25,6 +25,8 @@ app.get('*', function(req, res) {
   res.sendFile(path.join(__dirname, './build', 'index.html'));
 });
 
+app.use(createProxyMiddleware("/api", { target: "http://localhost:3000" }));
+
 const port = process.env.PORT || 5001;
 app.listen(port, () => {
   console.log('Listening on port ' + port)
