@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const getAllPosts = () => {
   return axios({
-    url: '/posts',
+    url: '/api/posts',
     method: 'GET',
   }).then(response => {
     return response.data || [];
@@ -14,7 +14,7 @@ export const getAllPosts = () => {
 
 export const getPost = (id) => {
   return axios({
-    url: `/posts/${id}`,
+    url: `/api/posts/${id}`,
     method: 'GET',
   }).then(response => {
     return response.data || [];
@@ -26,7 +26,7 @@ export const getPost = (id) => {
 
 export const createPost = ({ content, title }) => {
   return axios({
-    url: '/posts',
+    url: '/api/posts',
     method: 'POST',
     data: {
       title,
@@ -41,7 +41,7 @@ export const createPost = ({ content, title }) => {
 
 export const updatePost = ({ id, content, title }) => {
   return axios({
-    url: `/posts/${id}`,
+    url: `/api/posts/${id}`,
     method: 'PUT',
     data: {
       title,
@@ -56,7 +56,7 @@ export const updatePost = ({ id, content, title }) => {
 
 export const deletePost = ({ id }) => {
   return axios({
-    url: `/posts/${id}`,
+    url: `/api/posts/${id}`,
     method: 'DELETE',
   }).catch(response => {
     console.log(response);
