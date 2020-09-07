@@ -13,6 +13,10 @@ import PostsDirectory from './components/posts/PostsDirectory';
 import Post from './components/posts/Post';
 import PostEditor from './components/posts/PostEditor';
 
+import Markdown from 'react-markdown';
+import 'github-markdown-css';
+
+
 const PageBody = styled.div`
   background-color: ${colors.lightGrey};
   min-height: 100%;
@@ -98,6 +102,57 @@ const Body = styled.div`
   margin-top: 1em;
 `
 
+const TableContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  margin-top: 2em;
+  align-items: center;
+
+  table {
+    text-align: center;
+    width: auto !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+`
+
+const RankingsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+`
+
+const draftRanking = `
+| ** Team ** | ** Power Index ** |
+| ---------- | ----------------- |
+| ** Mark ** | 100 |
+| ** Nick ** | 96 |
+| ** Daniel ** | 93 |
+| ** Luke ** | 89 |
+| ** Josiah ** | 81 |
+| ** Matt ** | 79 |
+| ** Gary ** | 77 |
+| ** Derek ** | 74 |
+| ** Josias ** | 66 |
+| ** Spencer ** | 55 |
+`
+
+const dynastyRanking = `
+| ** Team ** | ** Power Index ** |
+| ---------- | ----------------- |
+| ** Nick ** | 100 |
+| ** Mark ** | 92 |
+| ** Matt ** | 86 |
+| ** Luke ** | 85 |
+| ** Dan ** | 82 |
+| ** Josiah ** | 81 |
+| ** Gary ** | 77 |
+| ** Derek ** | 72 |
+| ** Josias ** | 70 |
+| ** Spencer ** | 62 |
+`
+
 function Home() {
   return (
     <HomeContainer>
@@ -107,6 +162,16 @@ function Home() {
       <Body>
         It's gonna look pretty bare in here for a while, but I'm working on it. At a bare minimum, check back each week to read
         my latest ramblings about your team, my team, and everything in between. I'll keep y'all posted as things move along.
+        <RankingsContainer>
+          <TableContainer className="markdown-body">
+            <Title>Season Power Rankings</Title>
+            <Markdown source={draftRanking} />
+          </TableContainer>
+          <TableContainer className="markdown-body">
+            <Title>Dynasty Power Rankings</Title>
+            <Markdown source={dynastyRanking} />
+          </TableContainer>
+        </RankingsContainer>
       </Body>
     </HomeContainer>
   );

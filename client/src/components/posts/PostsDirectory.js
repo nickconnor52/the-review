@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { getAllPosts } from './api';
 
-import MarkdownView from 'react-showdown';
+import Markdown from 'react-markdown';
 
 const Container = styled.div`
   margin-top: 2em;
@@ -49,9 +49,8 @@ function PostPreview(props) {
     <PostContainer>
       <Title>{title}</Title>
       <div>
-        <MarkdownView
-          markdown={trimmedContent}
-          options={{ tables: true, emoji: true, flavor: 'github' }}
+        <Markdown
+          source={trimmedContent}
         />
         <PostLink>
           <Link to={`/posts/${id}`}>see more >></Link>
