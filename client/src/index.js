@@ -11,9 +11,6 @@ if (process.env.NODE_ENV === 'production') {
   console.log(process.env.API_BASE_URL)
   axios.defaults.baseURL = process.env.API_BASE_URL || ''
 }
-if (process.env.NODE_ENV === 'development') {
-  axios.defaults.baseURL = 'http://test.com/' || ''
-}
 
 ReactDOM.render(<App />, document.getElementById('root'));
 // If you want your app to work offline and load faster, you can change
