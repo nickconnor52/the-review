@@ -6,7 +6,7 @@ This is the backend for the League In Review
 
 Need to serve only the API to the Heroku app hosting service, this is done with the following pattern
 ```
-$: git subtree split --prefix server -b deploy
+$: git subtree split --prefix [server / client] -b deploy
 $: git push -f heroku-[api / ui] deploy:master
 $: git branch -D deploy
 ```
