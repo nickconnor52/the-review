@@ -3,7 +3,7 @@ class PostsController < ApplicationController
   before_action :find_post, only: [:show, :update, :destroy]
 
   def index
-    posts = Post.all.order :created_at
+    posts = Post.all.order created_at: :desc
 
     render :json => posts, :include => [:user]
   end

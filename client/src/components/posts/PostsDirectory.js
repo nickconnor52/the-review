@@ -66,7 +66,6 @@ export default function PostsDirectory() {
   useEffect(() => {
     getAllPosts()
       .then(posts => {
-        console.log(posts)
         setPosts(posts);
       });
   }, []);
