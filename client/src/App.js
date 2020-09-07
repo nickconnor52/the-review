@@ -22,7 +22,6 @@ if (process.env.NODE_ENV === 'production') {
   axios.defaults.baseURL = process.env.API_BASE_URL || ''
 }
 
-
 const PageBody = styled.div`
   background-color: ${colors.lightGrey};
   min-height: 100%;
