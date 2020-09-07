@@ -15,6 +15,12 @@ import PostEditor from './components/posts/PostEditor';
 
 import Markdown from 'react-markdown';
 import 'github-markdown-css';
+import axios from 'axios';
+
+if (process.env.NODE_ENV === 'production') {
+  console.log(process.env.API_BASE_URL)
+  axios.defaults.baseURL = process.env.API_BASE_URL || ''
+}
 
 
 const PageBody = styled.div`
