@@ -27,7 +27,7 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
-    "heroku-postbuild": "yarn install --only=dev --no-shrinkwrap && yarn build"
+    "heroku-postbuild": "yarn install --no-shrinkwrap && NODE_ENV=production yarn build"
   },
   "eslintConfig": {
     "extends": "react-app"
