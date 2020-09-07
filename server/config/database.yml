@@ -6,10 +6,18 @@ default: &default
   username: <%= ENV['DB_USERNAME'] %>
   password: <%= ENV['DB_PASSWORD'] %>
 
+production:
+  <<: *default
+  database: <%= ENV['PROD_DB_NAME'] %>
+  host: <%= ENV['PROD_DB_HOST'] %>
+  port: <%= ENV['PROD_DB_PORT'] %>
+  username: <%= ENV['PROD_DB_USERNAME'] %>
+  password: <%= ENV['PROD_DB_PASSWORD'] %>
+
 development:
   <<: *default
   database: <%= ENV['DB_NAME'] %>
-  host: <%= ENV['DB_ENDPOINT'] %>
+  host: <%= ENV['DB_HOST'] %>
   port: <%= ENV['DB_PORT'] %>
   username: <%= ENV['DB_USERNAME'] %>
   password: <%= ENV['DB_PASSWORD'] %>

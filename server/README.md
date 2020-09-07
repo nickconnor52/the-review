@@ -1,23 +1,21 @@
 # README
 
-This is the Rails server for The Review
+This is the backend for the League In Review
 
-Things you may want to cover:
+## Deploying:
 
-* Ruby version
+Need to serve only the API to the Heroku app hosting service, this is done with the following pattern
+```
+$: git subtree split --prefix server -b deploy
+$: git push -f heroku-[branch] deploy:master
+$: git branch -D deploy
+```
 
-* System dependencies
+Now have two separate Heroku ENV's, heroku-api & heroku-ui
+The plan will be to build release and then push it to the separate branches
+```
+$: git subtree push ---prefix [directory] [heroku-app] [branch-name (release)]
+```
 
-* Configuration
+Backend Heroku App -- heroku-api
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
