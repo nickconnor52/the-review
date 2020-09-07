@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { colors } from '../core/colors';
+import { colors, sm } from '../core/style';
 
 const NavigationContainer = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
   height: 5em;
   background-color: ${colors.washedPurple};
@@ -13,21 +12,27 @@ const NavigationContainer = styled.div`
 
 const NavLinksContainer = styled.div`
   display: flex;
-  flex-direction: row;
   align-items: center;
-  margin-left: 10em;
+  flex-grow: 2;
+  padding-right: 1em;
 `
 
 const LogoContainer = styled.div`
-  margin-left: 2em;
+  text-align: center;
   font-size: 2em;
   font-weight: bold;
   cursor: pointer;
+  flex-grow: 1;
+  padding-left: 1em;
   color: ${colors.lightGrey};
+
+  @media (max-width: ${sm}) {
+    font-size: 1.5em;
+  }
 `
 
 const NavButton = styled.div`
-  margin-right: 2em;
+  padding-right: 2em;
   font-weight: ${props => props.active ? 'bold' : ''};
 
   a {

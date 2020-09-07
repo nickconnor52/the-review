@@ -25,12 +25,6 @@ const Title = styled.h2`
   font-weight: bold;
 `
 
-const Body = styled.div`
-  display: flex;
-  width: 75%;
-  flex-direction: column;
-`
-
 const MyImage = props => {
   const [fullSize, setFullSize] = useState();
   const handleClick = () => {

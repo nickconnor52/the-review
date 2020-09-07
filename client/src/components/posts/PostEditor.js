@@ -60,6 +60,7 @@ const SummaryContainer = styled.div`
   flex-direction: row;
   align-items: center;
   margin-bottom: 1em;
+  max-width: 90%
 `
 
 function PostEditor() {
@@ -99,7 +100,7 @@ function PostEditor() {
         setSummary(post.summary)
       })
     }
-  }, []);
+  }, [isNew, id]);
 
   return (
     <EditContainer>

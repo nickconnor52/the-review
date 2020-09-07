@@ -5,7 +5,7 @@ import {
   Route,
 } from 'react-router-dom';
 import styled from 'styled-components';
-import { colors } from './core/colors';
+import { colors, sm } from './core/style';
 
 import NavigationBar from './components/NavigationBar';
 import Owners from './components/owners/Owners';
@@ -115,6 +115,7 @@ const TableContainer = styled.div`
   align-items: center;
 
   table {
+    padding-top: 1em;
     text-align: center;
     width: auto !important;
     margin-left: auto;
@@ -126,6 +127,10 @@ const RankingsContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+
+  @media(max-width: ${sm}) {
+    flex-direction: column
+  }
 `
 
 const draftRanking = `
