@@ -8,7 +8,7 @@ import axios from 'axios'
 ReactDOM.render(<App />, document.getElementById('root'));
 
 if (process.env.NODE_ENV === 'production') {
-  axios.defaults.baseURL = process.env.API_BASE_URI || ''
+  axios.defaults.baseURL = process.env.API_BASE_URL || ''
 }
 
 // If you want your app to work offline and load faster, you can change
