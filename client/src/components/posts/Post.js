@@ -19,7 +19,6 @@ const PostContainer = styled.div`
   flex-direction: column;
   width: 100%;
   align-items: center;
-  margin-bottom: 2em;
 `
 
 const Title = styled.h2`

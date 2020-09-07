@@ -16,6 +16,30 @@ import PostEditor from './components/posts/PostEditor';
 const PageBody = styled.div`
   background-color: ${colors.lightGrey};
   min-height: 100%;
+  padding-bottom: 2em;
+`
+
+const Footer = styled.div`
+  background-color: ${colors.lightGrey};
+  height: 5em;
+`
+
+const FooterText = styled.div`
+  display: flex;
+  height: 80%;
+  margin-left: 4em;
+  font-size: 0.5em;
+  align-items: center;
+`
+
+const Break = styled.hr`
+  border: 0;
+  margin-top: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
 `
 
 export default function App() {
@@ -46,6 +70,12 @@ export default function App() {
             </Route>
           </Switch>
       </PageBody>
+      <Footer>
+        <Break />
+        <FooterText>
+          The League Review 2020
+        </FooterText>
+      </Footer>
     </Router>
   );
 }
