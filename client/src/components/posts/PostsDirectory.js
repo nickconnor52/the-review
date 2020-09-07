@@ -42,7 +42,7 @@ const PostLink = styled.div`
 `
 
 function PostPreview(props) {
-  const { content, title, id } = props;
+  const { content, title, summary, id } = props;
   const trimmedContent = content.length > 250 ? `${content.substring(0, 250)}...` : content;
 
   return (
@@ -50,7 +50,7 @@ function PostPreview(props) {
       <Title>{title}</Title>
       <div>
         <Markdown
-          source={trimmedContent}
+          source={summary || trimmedContent}
         />
         <PostLink>
           <Link to={`/posts/${id}`}>see more >></Link>

@@ -55,11 +55,19 @@ const inlineStyle = {
   width: '60%',
 };
 
+const SummaryContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 1em;
+`
+
 function PostEditor() {
   const { id } = useParams();
   const isNew = isUndefined(id);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+  const [summary, setSummary] = useState("");
   const [selectedTab, setSelectedTab] = useState("write");
   const history = useHistory();
 
@@ -73,11 +81,11 @@ function PostEditor() {
 
   const onSave = () => {
     if (isNew) {
-      createPost({ title, content }).then((post) => {
+      createPost({ title, content, summary }).then((post) => {
         history.push(`/posts/${post.id}`)
       });
     } else {
-      updatePost({ title, content, id}).then((post) => {
+      updatePost({ title, content, summary, id}).then((post) => {
         history.push(`/posts/${id}`)
       })
     }
@@ -88,6 +96,7 @@ function PostEditor() {
       getPost(id).then(post => {
         setContent(post.content)
         setTitle(post.title)
+        setSummary(post.summary)
       })
     }
   }, []);
@@ -98,6 +107,10 @@ function PostEditor() {
         <Label>Title:</Label>
         <TitleInput value={title} onChange={(e) => setTitle(e.target.value)}/>
       </div>
+      <SummaryContainer>
+        <Label>Summary:</Label>
+        <textarea value={summary} onChange={(e) => setSummary(e.target.value)} rows="4" cols="50" />
+      </SummaryContainer>
       <div className="container" style={inlineStyle}>
         <ReactMde
           value={content}

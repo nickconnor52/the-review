@@ -18,6 +18,7 @@ class PostsController < ApplicationController
 
   def update
     @post.content = post_params[:content]
+    @post.summary = post_params[:summary]
     @post.title = post_params[:title] unless post_params[:title].blank?
     @post.save!
 
@@ -43,6 +44,6 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.permit(:id, :title, :content)
+    params.permit(:id, :title, :content, :summary)
   end
 end

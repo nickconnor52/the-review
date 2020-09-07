@@ -24,13 +24,14 @@ export const getPost = (id) => {
   })
 }
 
-export const createPost = ({ content, title }) => {
+export const createPost = ({ content, title, summary }) => {
   return axios({
     url: '/api/posts',
     method: 'POST',
     data: {
       title,
-      content
+      content,
+      summary,
     }
   }).then(response => {
     return response.data || {};
@@ -39,13 +40,14 @@ export const createPost = ({ content, title }) => {
   });
 }
 
-export const updatePost = ({ id, content, title }) => {
+export const updatePost = ({ id, content, title, summary }) => {
   return axios({
     url: `/api/posts/${id}`,
     method: 'PUT',
     data: {
       title,
-      content
+      content,
+      summary,
     }
   }).then(response => {
     return response.data || {};
