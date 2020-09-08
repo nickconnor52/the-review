@@ -4,10 +4,15 @@ class Mappers::ApiMapper
   end
 
   def persist_players
+    error_messages = []
     @players_response.each do |player|
       player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access)
-      player_mapper.persist
+      successful_upsert = player_mapper.persist
+      unless successful_upsert
+        status[:error_messages] < player[:player][:fullName]
+      end
     end
+    error_messages
   end
 end
 
@@ -30,6 +35,15 @@ class Mappers::PlayerMapper
   end
 
   def persist
-    #
+    player = Player.find_or_initialize_by(espn_id: @espn_player_id)
+    player.first_name = @first_name
+    player.last_name = @last_name
+    player.full_name = @full_name
+    player.espn_fantasy_team_id = @espn_fantasy_team_id
+    player.espn_pro_team_id = @espn_pro_team_id
+    player.espn_position_id = @espn_position_id
+    player.jersey_number = @jersey_number
+    player.status = @status
+    player.save
   end
 end
