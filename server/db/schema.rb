@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200907045423) do
+ActiveRecord::Schema.define(version: 20200908204035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,23 @@ ActiveRecord::Schema.define(version: 20200907045423) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "players", force: :cascade do |t|
+    t.string "first_name", null: false
+    t.string "last_name", null: false
+    t.string "full_name", null: false
+    t.string "espn_id", null: false
+    t.string "espn_fantasy_team_id"
+    t.string "team_id"
+    t.string "espn_pro_team_id", null: false
+    t.string "pro_team_id"
+    t.string "espn_position_id"
+    t.string "position_id"
+    t.string "jersey_number"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title", null: false
     t.text "content", null: false
@@ -33,6 +50,16 @@ ActiveRecord::Schema.define(version: 20200907045423) do
     t.bigint "user_id"
     t.text "summary"
     t.index ["user_id"], name: "index_posts_on_user_id"
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "espn_id", null: false
+    t.string "location", null: false
+    t.string "nickname", null: false
+    t.string "abbreviation", null: false
+    t.string "logo_url", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
