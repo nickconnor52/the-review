@@ -36,6 +36,17 @@ class Mappers::ApiMapper
     end
     @error_messages
   end
+
+  def persist_pro_teams
+    @response.each do |conference|
+      team_mapper = Mappers::ProTeamMapper.new(conference.with_indifferent_access)
+      successful_upsert = team_mapper.persist
+      unless successful_upsert
+        @error_messages < conference[:name]
+      end
+    end
+    @error_messages
+  end
 end
 
 class Mappers::PlayerMapper
@@ -109,5 +120,24 @@ class Mappers::TeamMapper
     team_info.abbreviation = @abbreviation
     team_info.logo_url = @logo_url
     team_info.save
+  end
+end
+
+class Mappers::ProTeamMapper
+  def initialize(conference)
+    @conference_name = conference[:name]
+    @conference_teams = conference[:teams]
+  end
+
+  def persist
+    @conference_teams.each do |team|
+      pro_team = ProTeam.find_or_initialize_by(espn_id: team['id'])
+      pro_team.name = team['displayName']
+      pro_team.nickname = team['shortDisplayName']
+      pro_team.abbreviation = team['abbreviation']
+      pro_team.logo_url = team['logo']['href']
+      pro_team.conference_name = @conference_name
+      pro_team.save
+    end
   end
 end
