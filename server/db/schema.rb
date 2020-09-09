@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200909173418) do
+ActiveRecord::Schema.define(version: 20200909183558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,15 @@ ActiveRecord::Schema.define(version: 20200909173418) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "players_rosters", force: :cascade do |t|
+    t.bigint "player_id"
+    t.bigint "roster_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["player_id"], name: "index_players_rosters_on_player_id"
+    t.index ["roster_id"], name: "index_players_rosters_on_roster_id"
+  end
+
   create_table "posts", force: :cascade do |t|
     t.string "title", null: false
     t.text "content", null: false
@@ -79,6 +88,13 @@ ActiveRecord::Schema.define(version: 20200909173418) do
     t.string "abbreviation"
     t.string "logo_url"
     t.string "conference_name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "rosters", force: :cascade do |t|
+    t.string "team_id"
+    t.string "year"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -108,5 +124,7 @@ ActiveRecord::Schema.define(version: 20200909173418) do
     t.datetime "updated_at", null: false
   end
 
+  add_foreign_key "players_rosters", "players"
+  add_foreign_key "players_rosters", "rosters"
   add_foreign_key "posts", "users"
 end

@@ -56,6 +56,17 @@ class Mappers::ApiMapper
     end
     @error_messages
   end
+
+  def persist_historical_rosters(year)
+    @response.each do |team|
+      roster_mapper = Mappers::RosterMapper.new(team.with_indifferent_access, year)
+      successful_upsert = roster_mapper.persist
+      unless successful_upsert
+        @error_messages < team['id']
+      end
+    end
+    @error_messages
+  end
 end
 
 class Mappers::PlayerMapper
@@ -172,5 +183,41 @@ class Mappers::DraftMapper
       draft_pick.original_pick_team_id = team.to_param
       draft_pick.save
     end
+  end
+end
+
+class Mappers::RosterMapper
+  def initialize(team, year)
+    @team = Team.find_by(espn_id: team[:id])
+    @year = year
+    @response = team
+  end
+
+  def persist
+    roster = Roster.find_or_initialize_by(team_id: @team.to_param, year: @year)
+    roster.save!
+
+    players = @response[:roster][:entries]
+    players.each do |p|
+      player = find_player(p)
+      unless roster.players.find_by(id: player.to_param)
+        roster.players << player
+      end
+    end
+    roster.save
+  end
+
+  def find_player(player_info)
+    player = Player.find_or_initialize_by(espn_id: player_info['playerId'])
+    player.first_name = player_info['playerPoolEntry']['player']['firstName']
+    player.last_name = player_info['playerPoolEntry']['player']['lastName']
+    player.full_name = player_info['playerPoolEntry']['player']['fullName']
+    player.espn_pro_team_id = player_info['playerPoolEntry']['player']['proTeamId']
+    player.pro_team_id = ProTeam.find_by(espn_id: player_info['playerPoolEntry']['player']['proTeamId']).to_param
+    player.espn_position_id = player_info['playerPoolEntry']['player']['defaultPositionId']
+    player.status = player_info['status']
+    player.save
+
+    player
   end
 end

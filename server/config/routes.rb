@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       get 'sync_historical_players' => 'espn#sync_historical_players'
       get 'sync_teams' => 'espn#sync_teams'
       get 'sync_historical_teams' => 'espn#sync_historical_teams'
+      get 'sync_historical_rosters' => 'espn#sync_historical_rosters'
       get 'sync_owners' => 'espn#sync_owners'
       get 'sync_historical_owners' => 'espn#sync_historical_owners'
       get 'sync_historical_draft' => 'espn#sync_historical_draft'
