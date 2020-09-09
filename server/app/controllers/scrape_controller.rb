@@ -4,4 +4,8 @@ class ScrapeController < ApplicationController
 
     "https://fantasy.espn.com/apis/v3/games/ffl/seasons/#{year}/segments/0/leagues/#{ENV['LEAGUE_ID']}?"
   end
+
+  def history_url
+    "https://fantasy.espn.com/apis/v3/games/ffl/leagueHistory/#{ENV['LEAGUE_ID']}?"
+  end
 end
