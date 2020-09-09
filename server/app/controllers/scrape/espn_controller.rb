@@ -19,6 +19,25 @@ class Scrape::EspnController < ScrapeController
     render :json => { success: true, error_messages: error_messages }
   end
 
+
+  def sync_historical_players
+    cookie_from_params = {
+      swid: params[:swid],
+      espn_s2: params[:espn_s2]
+    }
+    query_params = {
+      :seasonId => params[:year] || Date.now.year,
+      :view => 'mRoster'
+    }
+    cookie_hash = HTTParty::CookieHash.new
+    cookie_hash.add_cookies(cookie_from_params)
+    response = HTTParty.get(history_url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
+    binding.pry
+    # api_mapper = Mappers::ApiMapper.new(response[0]['members'])
+    # error_messages = api_mapper.persist_owners
+    # render :json => { success: true, error_messages: error_messages }
+  end
+
   def sync_owners
     cookie_from_params = {
       swid: params[:swid],
@@ -82,6 +101,31 @@ class Scrape::EspnController < ScrapeController
     response = HTTParty.get(history_url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
     api_mapper = Mappers::ApiMapper.new(response[0]['teams'])
     error_messages = api_mapper.persist_teams
+    render :json => { success: true, error_messages: error_messages }
+  end
+
+  def sync_historical_draft
+    cookie_from_params = {
+      swid: params[:swid],
+      espn_s2: params[:espn_s2]
+    }
+    query_params = {
+      :seasonId => params[:year] || Date.now.year,
+      :view => 'mDraftDetail'
+    }
+    cookie_hash = HTTParty::CookieHash.new
+    cookie_hash.add_cookies(cookie_from_params)
+    response = HTTParty.get(history_url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
+    api_mapper = Mappers::ApiMapper.new(response[0]['draftDetail'])
+    error_messages = api_mapper.persist_draft
+    render :json => { success: true, error_messages: error_messages }
+  end
+
+  def sync_pro_teams
+    url = 'https://site.web.api.espn.com/apis/site/v2/teams?region=us&lang=en&leagues=nfl'
+    response = HTTParty.get(url)
+    api_mapper = Mappers::ApiMapper.new(response['nfl'])
+    error_messages = api_mapper.persist_pro_teams
     render :json => { success: true, error_messages: error_messages }
   end
 end

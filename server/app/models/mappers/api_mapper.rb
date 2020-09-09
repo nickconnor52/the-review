@@ -37,6 +37,15 @@ class Mappers::ApiMapper
     @error_messages
   end
 
+  def persist_draft
+    draft_mapper = Mappers::DraftMapper.new(@response.with_indifferent_access)
+    successful_upsert = draft_mapper.persist
+    unless successful_upsert
+      @error_messages < 'There was an issue with the draft'
+    end
+    @error_messages
+  end
+
   def persist_pro_teams
     @response.each do |conference|
       team_mapper = Mappers::ProTeamMapper.new(conference.with_indifferent_access)
@@ -138,6 +147,30 @@ class Mappers::ProTeamMapper
       pro_team.logo_url = team['logo']['href']
       pro_team.conference_name = @conference_name
       pro_team.save
+    end
+  end
+end
+
+class Mappers::DraftMapper
+  def initialize(draftDetails)
+    @picks = draftDetails[:picks]
+    @date = draftDetails[:completeDate]
+  end
+
+  def persist
+    draft_year = DateTime.strptime(@date.to_s,'%Q').year
+    draft = Draft.find_or_initialize_by(year: draft_year)
+    draft.save!
+    @picks.each do |pick|
+      draft_pick = DraftPick.find_or_initialize_by(draft_id: draft.id, overall_pick_number: pick['overallPickNumber'])
+      draft_pick.round_number = pick['roundId']
+      draft_pick.round_pick_number = pick['roundPickNumber']
+      player = Player.find_by(espn_id: pick['playerId'])
+      draft_pick.player_id = player.to_param
+      team = Team.find_by(espn_id: pick['teamId'])
+      draft_pick.team_id = team.to_param
+      draft_pick.original_pick_team_id = team.to_param
+      draft_pick.save
     end
   end
 end
