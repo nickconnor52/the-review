@@ -15,6 +15,17 @@ class Mappers::ApiMapper
     @error_messages
   end
 
+  def persits_active_lineups
+    @response.each do |player|
+      player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access)
+      successful_upsert = player_mapper.persist_lineup
+      unless successful_upsert
+        @error_messages < player[:player][:fullName]
+      end
+    end
+    @error_messages
+  end
+
   def persist_owners
     @response.each do |owner|
       owner_mapper = Mappers::OwnerMapper.new(owner.with_indifferent_access)
@@ -97,6 +108,14 @@ class Mappers::PlayerMapper
     player.espn_position_id = @espn_position_id
     player.jersey_number = @jersey_number
     player.status = @status
+    player.save
+  end
+
+  def persist_lineup
+    team = Team.find_by(espn_id: @espn_fantasy_team_id)
+    player = Player.find_or_initialize_by(espn_id: @espn_player_id)
+    player.espn_fantasy_team_id = @espn_fantasy_team_id
+    player.team_id = team.to_param
     player.save
   end
 end

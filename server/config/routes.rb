@@ -4,7 +4,8 @@ Rails.application.routes.draw do
     resources :posts
 
     namespace :scrape do
-      get 'all_players_by_year' => 'espn#fetch_all_players_by_year'
+      get 'sync_players_by_year' => 'espn#sync_players_by_year'
+      get 'sync_active_lineups' => 'espn#sync_active_lineups'
       get 'sync_historical_players' => 'espn#sync_historical_players'
       get 'sync_teams' => 'espn#sync_teams'
       get 'sync_historical_teams' => 'espn#sync_historical_teams'
