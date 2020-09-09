@@ -25,6 +25,17 @@ class Mappers::ApiMapper
     end
     @error_messages
   end
+
+  def persist_teams
+    @response.each do |team|
+      team_mapper = Mappers::TeamMapper.new(team.with_indifferent_access)
+      successful_upsert = team_mapper.persist
+      unless successful_upsert
+        @error_messages < team[:nickname]
+      end
+    end
+    @error_messages
+  end
 end
 
 class Mappers::PlayerMapper
@@ -75,5 +86,28 @@ class Mappers::OwnerMapper
     owner.season_joined = '2020'
     owner.city = 'Columbus, OH'
     owner.save
+  end
+end
+
+class Mappers::TeamMapper
+  attr_accessor :espn_id, :location, :nickname, :abbreviation, :logo_url
+
+  def initialize(team)
+    @espn_id = team[:id]
+    @location = team[:location]
+    @nickname = team[:nickname]
+    @abbreviation = team[:abbrev]
+    @logo_url = team[:logo]
+  end
+
+  def persist
+    team = Team.find_or_initialize_by(espn_id: @espn_id)
+    team.save
+    team_info = TeamIdentifier.find_or_initialize_by(team_id: team.to_param, location: @location, nickname: @nickname)
+    team_info.location = @location
+    team_info.nickname = @nickname
+    team_info.abbreviation = @abbreviation
+    team_info.logo_url = @logo_url
+    team_info.save
   end
 end
