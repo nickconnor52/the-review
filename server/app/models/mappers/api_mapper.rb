@@ -15,6 +15,17 @@ class Mappers::ApiMapper
     @error_messages
   end
 
+  def persist_transactions
+    @response.each do |player|
+      transaction_mapper = Mappers::TransactionMapper.new(player.with_indifferent_access)
+      successful_upsert = transaction_mapper.persist
+      unless successful_upsert
+        @error_messages < player[:player][:fullName]
+      end
+    end
+    @error_messages
+  end
+
   def persits_active_lineups
     @response.each do |player|
       player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access)
@@ -238,5 +249,44 @@ class Mappers::RosterMapper
     player.save
 
     player
+  end
+end
+
+class Mappers::TransactionMapper
+  def initialize(player)
+    @player_info = player
+  end
+
+  def persist
+    transactions = @player_info['transactions']
+    transactions.each do |t|
+      upsert_transaction(t)
+    end
+  end
+
+  def upsert_transaction(transaction_info)
+    unless transaction_info['type'] === 'DRAFT'
+      transaction = Transaction.find_or_initialize_by(espn_id: transaction_info['id'])
+      date = transaction_info['acceptedDate'] ? transaction_info['acceptedDate'] : transaction_info['proposedDate']
+      transaction.accepted_date = DateTime.strptime(date.to_s,'%Q')
+      transaction.transaction_type = transaction_info['type']
+      transaction.save
+
+      transaction_info['items'].each do |piece|
+        upsert_pieces(piece, transaction.to_param)
+      end unless transaction_info['items'].nil?
+    end
+  end
+
+  def upsert_pieces(piece_info, transaction_id)
+    player = Player.find_by(espn_id: @player_info['id'])
+    piece = TransactionPiece.find_or_initialize_by(transaction_id: transaction_id, player_id: player.to_param)
+    from_team = Team.find_by(espn_id: piece_info['fromTeamId'])
+    to_team = Team.find_by(espn_id: piece_info['toTeamId'])
+    piece.from_team_id = from_team.to_param
+    piece.to_team_id = to_team.to_param
+    piece.action_type = piece_info['type']
+
+    piece.save
   end
 end

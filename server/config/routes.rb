@@ -14,6 +14,8 @@ Rails.application.routes.draw do
       get 'sync_historical_owners' => 'espn#sync_historical_owners'
       get 'sync_historical_draft' => 'espn#sync_historical_draft'
       get 'sync_pro_teams' => 'espn#sync_pro_teams'
+      get 'sync_transactions' => 'espn#sync_transactions'
+      get 'sync_new_transactions' => 'espn#sync_new_transactions'
     end
   end
 end
