@@ -10,6 +10,7 @@ import { colors, sm } from './core/style';
 import NavigationBar from './components/NavigationBar';
 import Teams from './components/teams/Teams';
 import Team from './components/teams/Team';
+import Transactions from './components/transactions/Transactions';
 import PostsDirectory from './components/posts/PostsDirectory';
 import Post from './components/posts/Post';
 import PostEditor from './components/posts/PostEditor';
@@ -77,6 +78,9 @@ export default function App() {
             </Route>
             <Route path='/posts'>
               <PostsDirectory />
+            </Route>
+            <Route path='/transactions'>
+              <Transactions />
             </Route>
             <Route path='/'>
               <Home />

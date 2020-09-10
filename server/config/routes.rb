@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   scope path: 'api' do
     resources :posts
     resources :teams
+    resources :transactions
 
     namespace :scrape do
       get 'sync_players_by_year' => 'espn#sync_players_by_year'

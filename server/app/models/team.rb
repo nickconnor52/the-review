@@ -1,6 +1,7 @@
 class Team < ActiveRecord::Base
   has_many :rosters
   has_many :owners
+  has_many :transaction_pieces
 
   def roster
     Player.where(team_id: self.id).all
