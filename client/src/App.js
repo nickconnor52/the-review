@@ -8,7 +8,8 @@ import styled from 'styled-components';
 import { colors, sm } from './core/style';
 
 import NavigationBar from './components/NavigationBar';
-import Owners from './components/owners/Owners';
+import Teams from './components/teams/Teams';
+import Team from './components/teams/Team';
 import PostsDirectory from './components/posts/PostsDirectory';
 import Post from './components/posts/Post';
 import PostEditor from './components/posts/PostEditor';
@@ -59,8 +60,11 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
-            <Route path='/owners'>
-              <Owners />
+            <Route path='/teams/:id'>
+              <Team />
+            </Route>
+            <Route path='/teams'>
+              <Teams />
             </Route>
             <Route path='/posts/edit'>
               <PostEditor />
