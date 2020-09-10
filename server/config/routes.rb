@@ -16,6 +16,8 @@ Rails.application.routes.draw do
       get 'sync_pro_teams' => 'espn#sync_pro_teams'
       get 'sync_transactions' => 'espn#sync_transactions'
       get 'sync_new_transactions' => 'espn#sync_new_transactions'
+      get 'sync_schedule' => 'espn#sync_schedule'
+      get 'sync_historical_schedule' => 'espn#sync_historical_schedule'
     end
   end
 end

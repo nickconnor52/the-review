@@ -37,6 +37,17 @@ class Mappers::ApiMapper
     @error_messages
   end
 
+  def persist_schedule(year)
+    @response.each do |game|
+      game_mapper = Mappers::ScheduleMapper.new(game.with_indifferent_access, year)
+      successful_upsert = game_mapper.persist
+      unless successful_upsert
+        @error_messages < game[:away_team_id]
+      end
+    end
+    @error_messages
+  end
+
   def persist_owners
     @response.each do |owner|
       owner_mapper = Mappers::OwnerMapper.new(owner.with_indifferent_access)
@@ -213,6 +224,24 @@ class Mappers::DraftMapper
       draft_pick.original_pick_team_id = team.to_param
       draft_pick.save
     end
+  end
+end
+
+class Mappers::ScheduleMapper
+  def initialize(game, year)
+    @game = game
+    @year = year
+    @home_team = Team.find_by(espn_id: game[:home][:teamId])
+    @away_team = Team.find_by(espn_id: game[:away][:teamId])
+  end
+
+  def persist
+    game = Game.find_or_initialize_by(season: @year, week: @game[:matchupPeriodId], away_team_id: @away_team.to_param, home_team_id: @home_team.to_param)
+    game.away_score = @game['away']['totalPoints']
+    game.home_score = @game['home']['totalPoints']
+    game.winner = @game['winner']
+    game.playoff_tier_type = @game['playoffTierType']
+    game.save
   end
 end
 
