@@ -70,6 +70,17 @@ class Mappers::ApiMapper
     @error_messages
   end
 
+  def persist_season_stats(year)
+    @response.each do |team|
+      stat_mapper = Mappers::SeasonStatMapper.new(team.with_indifferent_access, year)
+      successful_upsert = stat_mapper.persist
+      unless successful_upsert
+        @error_messages < team[:nickname]
+      end
+    end
+    @error_messages
+  end
+
   def persist_draft
     draft_mapper = Mappers::DraftMapper.new(@response.with_indifferent_access)
     successful_upsert = draft_mapper.persist
@@ -181,6 +192,21 @@ class Mappers::TeamMapper
     team_info.abbreviation = @abbreviation
     team_info.logo_url = @logo_url
     team_info.save
+  end
+end
+
+class Mappers::SeasonStatMapper
+  def initialize(team, year)
+    @team = team
+    @year = year
+  end
+
+  def persist
+    team = Team.find_by(espn_id: @team['id'])
+    stats = SeasonStat.find_or_initialize_by(team_id: team.to_param, season: @year)
+    stats.playoff_seed = @team['playoffSeed']
+    stats.final_espn_rank = @team['rankCalculatedFinal']
+    stats.save
   end
 end
 
