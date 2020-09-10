@@ -111,6 +111,33 @@ class Mappers::ApiMapper
     end
     @error_messages
   end
+
+  def persist_player_stats(year, week)
+    @response.each do |game|
+      if players = game.dig('away', 'rosterForCurrentScoringPeriod', 'entries')
+        espn_team_id = game['away']['teamId']
+        players.each do |p|
+          player_mapper = Mappers::PlayerStatMapper.new(p['playerPoolEntry']['player'].with_indifferent_access, year, week, espn_team_id)
+          successful_upsert = player_mapper.persist
+          unless successful_upsert
+            @error_messages < espn_team_id['id']
+          end
+        end
+      end
+
+      if players = game.dig('home', 'rosterForCurrentScoringPeriod', 'entries')
+        players.each do |p|
+          espn_team_id = game['home']['teamId']
+          player_mapper = Mappers::PlayerStatMapper.new(p['playerPoolEntry']['player'].with_indifferent_access, year, week, espn_team_id)
+          successful_upsert = player_mapper.persist
+          unless successful_upsert
+            @error_messages < espn_team_id['id']
+          end
+        end
+      end
+    end
+    @error_messages
+  end
 end
 
 class Mappers::PlayerMapper
@@ -304,6 +331,29 @@ class Mappers::RosterMapper
     player.save
 
     player
+  end
+end
+
+class Mappers::PlayerStatMapper
+  def initialize(player, year, week, espn_team_id)
+    @player = player
+    @week = week
+    @year = year
+    @team = Team.find_by(espn_id: espn_team_id)
+  end
+
+  def persist
+    player = Player.find_by(espn_id: @player['id'])
+    stat = PlayerStat.find_or_initialize_by(player_id: player.to_param, season: @year, week: @week)
+    @player['stats'].each do |s|
+      if s['statSourceId'] == 0
+        stat.actual_total = s['appliedTotal']
+      elsif s['statSourceId'] == 1
+        stat.projected_total = s['appliedTotal']
+      end
+    end
+    stat.team_id = @team.to_param
+    stat.save
   end
 end
 
