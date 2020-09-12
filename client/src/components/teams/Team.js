@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 
-import { getTeam } from './api';
+import { getTeam, getTeamTransactions } from './api';
 
 const Container = styled.div`
   margin-top: 2em;
@@ -13,7 +13,8 @@ const Header = styled.div`
   font-weight: 600;
   text-align: center;
 `
-const RosterContainer = styled.div`
+
+const ContentContainer = styled.div`
   margin-top: 2em;
   display: flex;
   width: 100%;
@@ -23,6 +24,7 @@ const RosterContainer = styled.div`
 
 function Team() {
   const [team, setTeam] = useState({});
+  const [transactions, setTransactions] = useState([]);
   const { id } = useParams();
   const team_info = team.team_info || {};
   const roster = team.roster || [];
@@ -36,10 +38,16 @@ function Team() {
     });
   }, []);
 
+  useEffect(() => {
+    getTeamTransactions(id).then(response => {
+      setTransactions(response)
+    });
+  }, []);
+
   return (
     <Container>
       <Header>{`${location} ${nickname}`}</Header>
-      <RosterContainer>
+      <ContentContainer>
         {roster.map(player => {
           return (
             <p>
@@ -47,7 +55,10 @@ function Team() {
             </p>
           )
         })}
-      </RosterContainer>
+      </ContentContainer>
+      <ContentContainer>
+        <Header>Transactions</Header>
+      </ContentContainer>
     </Container>
   )
 }

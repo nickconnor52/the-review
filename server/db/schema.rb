@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200910022816) do
+ActiveRecord::Schema.define(version: 20200912170744) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,6 +156,15 @@ ActiveRecord::Schema.define(version: 20200910022816) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "teams_transactions", force: :cascade do |t|
+    t.bigint "team_id"
+    t.bigint "transaction_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_teams_transactions_on_team_id"
+    t.index ["transaction_id"], name: "index_teams_transactions_on_transaction_id"
+  end
+
   create_table "transaction_pieces", force: :cascade do |t|
     t.string "from_team_id"
     t.string "to_team_id"
@@ -188,4 +197,6 @@ ActiveRecord::Schema.define(version: 20200910022816) do
   add_foreign_key "players_rosters", "players"
   add_foreign_key "players_rosters", "rosters"
   add_foreign_key "posts", "users"
+  add_foreign_key "teams_transactions", "teams"
+  add_foreign_key "teams_transactions", "transactions"
 end

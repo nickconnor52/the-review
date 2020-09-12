@@ -1,4 +1,6 @@
 class TransactionPiece < ActiveRecord::Base
+  belongs_to :player
+
   def receiving_team
     if self.to_team_id.nil?
       return nil

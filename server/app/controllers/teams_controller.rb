@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  before_action :find_team, only: [:show, :update]
+  before_action :get_team, only: [:show, :update, :team_transactions]
 
   def index
     teams = Team.all.order created_at: :desc
@@ -11,8 +11,30 @@ class TeamsController < ApplicationController
     render :json => @team, :include => [:team_info, :roster]
   end
 
+  def team_transactions
+    transactions = Transaction.includes(:teams).where('teams.id' => team_params[:id]).order accepted_date: :desc
+
+    render :json => transactions, :include => [
+      {
+        :teams => {
+          :include => :team_info
+        }
+      },
+      {
+        :transaction_pieces => {
+          :include => [
+            :player,
+            :source_team,
+            :receiving_team
+          ]
+        }
+      }
+    ]
+  end
+
+
   private
-  def find_team
+  def get_team
     @team = Team.find(team_params[:id])
   end
 

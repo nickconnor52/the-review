@@ -2,7 +2,12 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   scope path: 'api' do
     resources :posts
-    resources :teams
+    resources :teams do
+      member do
+        get 'transactions', to: 'teams#team_transactions'
+      end
+    end
+
     resources :transactions
 
     namespace :scrape do
