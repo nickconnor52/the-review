@@ -8,7 +8,7 @@ class TeamsController < ApplicationController
   end
 
   def show
-    render :json => @team, :include => [:team_info, :roster]
+    render :json => @team, :include => [:current_owner, :team_info, :past_team_info, :roster]
   end
 
   def team_transactions
