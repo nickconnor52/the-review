@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import RosterTable from './RosterTable';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { colors, sm } from '../../core/style';
@@ -176,13 +177,7 @@ function Team() {
         <hr style={{width: '100%'}} />
         <ContentContainer>
           <Header>Current Lineup</Header>
-          {roster.map(player => {
-            return (
-              <p key={player.full_name}>
-                {player.full_name}
-              </p>
-            )
-          })}
+          <RosterTable roster={roster} />
         </ContentContainer>
         <ContentContainer>
           <Header>Transactions</Header>
