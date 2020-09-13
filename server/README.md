@@ -1,6 +1,6 @@
 # README
 
-This is the backend for the League In Review
+This is the backend for the League In Review.
 
 ## Deploying:
 
