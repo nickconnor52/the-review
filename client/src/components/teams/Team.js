@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import RosterTable from './RosterTable';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { colors, sm } from '../../core/style';
+import { sm } from '../../core/style';
 
 import { getTeam, getTeamTransactions } from './api';
 
