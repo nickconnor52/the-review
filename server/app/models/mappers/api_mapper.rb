@@ -377,9 +377,16 @@ class Mappers::TransactionMapper
       transaction.transaction_type = transaction_info['type']
       transaction.save
 
+      transaction_teams = []
+
       transaction_info['items'].each do |piece|
-        upsert_pieces(piece, transaction.to_param)
+        piece = upsert_pieces(piece, transaction.to_param)
+        from_team_info = piece.source_team
+        to_team_info = piece.receiving_team
+        transaction_teams << Team.find(from_team_info.team_id) unless from_team_info.nil?
+        transaction_teams << Team.find(to_team_info.team_id) unless to_team_info.nil?
       end unless transaction_info['items'].nil?
+      transaction.teams = transaction_teams.uniq
     end
   end
 
@@ -393,5 +400,7 @@ class Mappers::TransactionMapper
     piece.action_type = piece_info['type']
 
     piece.save
+
+    piece
   end
 end
