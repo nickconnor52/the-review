@@ -179,9 +179,6 @@ function Team() {
           <Header>Current Lineup</Header>
           <RosterTable roster={roster} />
         </ContentContainer>
-        <ContentContainer>
-          <Header>Transactions</Header>
-        </ContentContainer>
       </BodyContainer>
     </PageContainer>
   )
