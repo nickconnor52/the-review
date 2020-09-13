@@ -383,9 +383,9 @@ class Mappers::TransactionMapper
         piece = upsert_pieces(piece, transaction.to_param)
         from_team_info = piece.source_team
         to_team_info = piece.receiving_team
-        transaction_teams << Team.find(from_team_info.team_id) unless from_team_info.nil?
-        transaction_teams << Team.find(to_team_info.team_id) unless to_team_info.nil?
-      end unless transaction_info['items'].nil?
+        transaction_teams << Team.find(from_team_info.team_id) unless from_team_info.blank?
+        transaction_teams << Team.find(to_team_info.team_id) unless to_team_info.blank?
+      end unless transaction_info['items'].blank?
       transaction.teams = transaction_teams.uniq
     end
   end

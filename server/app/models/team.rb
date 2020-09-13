@@ -7,13 +7,13 @@ class Team < ActiveRecord::Base
   def current_owner
     Owner
       .where(team_id: self.id)
-      .where(last_active_season: nil).first
+      .where(last_active_season: [nil, '']).first
   end
 
   def past_owners
     Owner
       .where(team_id: self.id)
-      .where.not(last_active_season: nil)
+      .where.not(last_active_season: [nil, ''])
   end
 
   def roster

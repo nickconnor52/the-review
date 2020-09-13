@@ -7,8 +7,8 @@ namespace :data do
       pieces.each do |piece|
         from_team_info = piece.source_team
         to_team_info = piece.receiving_team
-        transaction_teams << Team.find(from_team_info.team_id) unless from_team_info.nil?
-        transaction_teams << Team.find(to_team_info.team_id) unless to_team_info.nil?
+        transaction_teams << Team.find(from_team_info.team_id) unless from_team_info.blank?
+        transaction_teams << Team.find(to_team_info.team_id) unless to_team_info.blank?
       end
       transaction.teams = transaction_teams.uniq
     end
