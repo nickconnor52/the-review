@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     resources :teams do
       member do
         get 'transactions', to: 'teams#team_transactions'
+        get 'roster/:year', to: 'teams#roster'
       end
     end
 

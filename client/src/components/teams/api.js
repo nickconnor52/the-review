@@ -21,7 +21,7 @@ export const getTeam = (id) => {
   }).catch(response => {
     console.log(response);
     return {};
-  })
+  });
 }
 
 export const getTeamTransactions = (id) => {
@@ -33,5 +33,17 @@ export const getTeamTransactions = (id) => {
   }).catch(response => {
     console.log(response);
     return {};
-  })
+  });
+}
+
+export const getRoster = (id, year) => {
+  return axios({
+    url: `/api/teams/${id}/roster/${year}`,
+    method: 'GET',
+  }).then(response => {
+    return response.data || {};
+  }).catch(response => {
+    console.log(response);
+    return {};
+  });
 }

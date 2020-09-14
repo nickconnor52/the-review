@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import RosterTable from './RosterTable';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
+import moment from 'moment';
 import { sm } from '../../core/style';
 
-import { getTeam, getTeamTransactions } from './api';
+import { getTeam, getTeamTransactions, getRoster } from './api';
 
 const PageContainer = styled.div`
   margin-top: 2em;
@@ -32,6 +33,19 @@ const Header = styled.div`
   font-size: 1.5em;
   font-weight: 600;
   text-align: center;
+`
+
+const HeaderBar = styled.div`
+  display: flex;
+  align-items: center;
+  width: 90%;
+  justify-content: center;
+  flex-direction: column;
+`
+
+const YearDropdown = styled.div`
+  display: flex;
+  margin-left: auto;
 `
 
 const ContentContainer = styled.div`
@@ -81,7 +95,7 @@ const TeamInfo = styled.div`
 
 const InfoItem = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   margin-bottom: 1em;
 `
 
@@ -89,12 +103,12 @@ const Label = styled.div`
   font-weight: bold;
   width: 10em;
 `
-const Value = styled.div`
-`
+const Value = styled.div``
 
 const ValueList = styled.div`
   display: flex;
   flex-direction: column;
+  margin-left: auto;
 `
 
 const ListItem = styled.div`
@@ -107,7 +121,10 @@ function Team() {
   const { id } = useParams();
   const team_info = team.team_info || {};
   const past_info = team.past_team_info || [];
-  const roster = team.roster || [];
+
+  const [roster, setRoster] = useState([]);
+  const [rosterYear, setRosterYear] = useState(moment().year());
+
   const current_owner = team.current_owner || {};
 
   const location = team_info.location || '';
@@ -128,6 +145,12 @@ function Team() {
       setTransactions(response)
     });
   }, []);
+
+  useEffect(() => {
+    getRoster(id, rosterYear).then(response => {
+      setRoster(response)
+    });
+  }, [rosterYear]);
 
   return (
     <PageContainer>
@@ -162,7 +185,11 @@ function Team() {
                     <Label>Former Names:</Label>
                     <ValueList>
                       {
-                        past_info.map(info => (<ListItem>{`${info.location} ${info.nickname}`}</ListItem>))
+                        past_info.map(info => (
+                          <ListItem key={`${info.location}-${info.location}`}>
+                            {`${info.location} ${info.nickname}`}
+                          </ListItem>
+                        ))
                       }
                     </ValueList>
                   </InfoItem>
@@ -176,7 +203,18 @@ function Team() {
         </TeamInfoContainer>
         <hr style={{width: '100%'}} />
         <ContentContainer>
-          <Header>Current Lineup</Header>
+          <HeaderBar>
+            <Header style={{ marginLeft: 'auto', marginRight: 'auto' }}>Current Lineup</Header>
+            <YearDropdown>
+              <select onChange={(e) => setRosterYear(e.target.value)} id="rosterPicker">
+                <option key='2020' value="2020">2020</option>
+                <option key='2019'value="2019">2019</option>
+                <option key='2018'value="2018">2018</option>
+                <option key='2017'value="2017">2017</option>
+                <option key='2016'value="2016">2016</option>
+              </select>
+            </YearDropdown>
+          </HeaderBar>
           <RosterTable roster={roster} />
         </ContentContainer>
       </BodyContainer>

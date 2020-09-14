@@ -1,5 +1,5 @@
 class TeamsController < ApplicationController
-  before_action :get_team, only: [:show, :update, :team_transactions]
+  before_action :get_team, only: [:show, :update, :team_transactions, :roster]
 
   def index
     teams = Team.all.order created_at: :desc
@@ -39,6 +39,19 @@ class TeamsController < ApplicationController
           ]
         }
       }
+    ]
+  end
+
+  def roster
+    if params[:year] === DateTime.now.year.to_s
+      @selected_roster = @team.roster
+    else
+      @selected_roster = @team.rosters.find_by(year: params[:year]).players
+    end
+
+    render :json => @selected_roster, :include => [
+      :pro_team,
+      :position
     ]
   end
 
