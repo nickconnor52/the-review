@@ -10,7 +10,7 @@ namespace :data do
     cookie_hash = HTTParty::CookieHash.new
     cookie_hash.add_cookies(cookie_from_params)
 
-    year = '2018'
+    year = '2020'
     url = "https://fantasy.espn.com/apis/v3/games/ffl/seasons/#{year}/segments/0/leagues/#{ENV['LEAGUE_ID']}?view=mMatchup&view=mMatchupScore"
 
     (1..17).each do |week|

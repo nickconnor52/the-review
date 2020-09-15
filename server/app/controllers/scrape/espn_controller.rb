@@ -160,7 +160,7 @@ class Scrape::EspnController < ScrapeController
     cookie_hash.add_cookies(cookie_from_params)
     response = HTTParty.get(current_year_url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string, 'x-fantasy-filter' => filter_hash.to_cookie_string }})
     api_mapper = Mappers::ApiMapper.new(response['players'])
-    error_messages = api_mapper.persits_active_lineups
+    error_messages = api_mapper.persist_active_lineups
     render :json => { success: true, error_messages: error_messages }
   end
 

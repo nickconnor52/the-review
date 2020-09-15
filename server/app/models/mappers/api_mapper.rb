@@ -26,7 +26,7 @@ class Mappers::ApiMapper
     @error_messages
   end
 
-  def persits_active_lineups
+  def persist_active_lineups
     @response.each do |player|
       player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access)
       successful_upsert = player_mapper.persist_lineup
@@ -151,7 +151,7 @@ class Mappers::PlayerMapper
     @full_name = player[:player][:fullName]
     @espn_player_id = player[:id]
     @espn_fantasy_team_id = player[:onTeamId]
-    @espn_pro_team_id = player[:onTeamId]
+    @espn_pro_team_id = player[:player][:proTeamId]
     @espn_position_id = player[:player][:defaultPositionId]
     @jersey_number = player[:player][:jersey]
     @status = player[:status]
@@ -166,16 +166,22 @@ class Mappers::PlayerMapper
     player.espn_fantasy_team_id = @espn_fantasy_team_id
     player.espn_pro_team_id = @espn_pro_team_id
     player.espn_position_id = @espn_position_id
+    player.position = Position.find_by(espn_id: @espn_position_id)
     player.jersey_number = @jersey_number
     player.status = @status
+    player.pro_team = ProTeam.find_by(espn_id: @espn_pro_team_id)
     player.save
   end
 
   def persist_lineup
+    pro_team = ProTeam.find_by(espn_id: @espn_pro_team_id)
     team = Team.find_by(espn_id: @espn_fantasy_team_id)
     player = Player.find_or_initialize_by(espn_id: @espn_player_id)
     player.espn_fantasy_team_id = @espn_fantasy_team_id
     player.team_id = team.to_param
+    player.espn_pro_team_id = @espn_pro_team_id
+    player.pro_team = pro_team
+
     player.save
   end
 end
