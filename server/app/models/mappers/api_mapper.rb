@@ -391,12 +391,15 @@ class Mappers::TransactionMapper
   end
 
   def upsert_pieces(piece_info, transaction_id)
-    player = Player.find_by(espn_id: @player_info['id'])
-    piece = TransactionPiece.find_or_initialize_by(transaction_id: transaction_id, player_id: player.to_param)
+    player = Player.find_by(espn_id: piece_info['playerId'])
     from_team = Team.find_by(espn_id: piece_info['fromTeamId'])
     to_team = Team.find_by(espn_id: piece_info['toTeamId'])
-    piece.from_team_id = from_team.to_param
-    piece.to_team_id = to_team.to_param
+    piece = TransactionPiece.find_or_initialize_by(
+      transaction_id: transaction_id,
+      player_id: player.to_param,
+      from_team_id:from_team.to_param,
+      to_team_id: to_team.to_param
+    )
     piece.action_type = piece_info['type']
 
     piece.save
