@@ -149,15 +149,15 @@ const draftRanking = `
 | ** Team ** | ** Power Index ** |
 | ---------- | ----------------- |
 | ** Mark ** | 100 |
+| ** Dan ** | 100 |
 | ** Nick ** | 96 |
-| ** Daniel ** | 93 |
-| ** Luke ** | 89 |
-| ** Josiah ** | 81 |
-| ** Matt ** | 79 |
-| ** Gary ** | 77 |
-| ** Derek ** | 74 |
-| ** Josias ** | 66 |
-| ** Spencer ** | 55 |
+| ** Josiah ** | 91 |
+| ** Matt ** | 86 |
+| ** Luke ** | 82 |
+| ** Gary ** | 78 |
+| ** Derek ** | 70 |
+| ** Josias ** | 68 |
+| ** Spencer ** | 52 |
 `
 
 const dynastyRanking = `
@@ -170,12 +170,33 @@ const dynastyRanking = `
 | ** Dan ** | 82 |
 | ** Josiah ** | 81 |
 | ** Gary ** | 77 |
-| ** Derek ** | 72 |
+| ** Derek ** | 73 |
 | ** Josias ** | 70 |
-| ** Spencer ** | 62 |
+| ** Spencer ** | 57 |
+`
+
+const playoffChances = `
+| ** Team ** | ** Odds ** |
+| ---------- | ----------------- |
+| ** Nick ** | 89% |
+| ** Dan ** | 75% |
+| ** Mark ** | 73% |
+| ** Josiah ** | 64% |
+| ** Matt ** | 41% |
+| ** Gary ** | 34% |
+| ** Luke ** | 16% |
+| ** Derek ** | 8% |
+| ** Josias ** | 1% |
+| ** Spencer ** | 0% |
+`
+
+const SubTitle = styled.div`
+font-style: italic;
+font-size: 0.8em;
 `
 
 function Home() {
+  const updated = '9/16/20'
   return (
     <HomeContainer>
       <Title>
@@ -187,11 +208,20 @@ function Home() {
         <RankingsContainer>
           <TableContainer className="markdown-body">
             <Title>Season Power Rankings</Title>
+            <SubTitle>Updated: {updated}</SubTitle>
             <Markdown source={draftRanking} />
           </TableContainer>
           <TableContainer className="markdown-body">
             <Title>Dynasty Power Rankings</Title>
+            <SubTitle>Updated: {updated}</SubTitle>
             <Markdown source={dynastyRanking} />
+          </TableContainer>
+        </RankingsContainer>
+        <RankingsContainer>
+          <TableContainer className="markdown-body">
+            <Title>Playoff Chances</Title>
+            <SubTitle>Updated: {updated}</SubTitle>
+            <Markdown source={playoffChances} />
           </TableContainer>
         </RankingsContainer>
       </Body>
