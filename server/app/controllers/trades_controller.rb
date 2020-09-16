@@ -1,4 +1,5 @@
 class TradesController < ApplicationController
+  before_action :get_trade, only: [:show]
   def index
     trades = Transaction.where(transaction_type: 'TRADE_ACCEPT').order created_at: :desc
 
@@ -16,5 +17,24 @@ class TradesController < ApplicationController
     ]
   end
 
+  def show
+    render :json => @trade, :include => [
+      {
+        :teams => {
+          :include => [:team_info]
+        }
+      },
+      {
+        :transaction_pieces => {
+          :include => [:source_team, :receiving_team, :player]
+        }
+      }
+    ]
+  end
+
   private
+
+  def get_trade
+    @trade = Transaction.find(params[:id])
+  end
 end
