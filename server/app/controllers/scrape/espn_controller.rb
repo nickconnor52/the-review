@@ -41,7 +41,7 @@ class Scrape::EspnController < ScrapeController
       espn_s2: params[:espn_s2]
     }
     query_params = {
-      :seasonId => params[:year] || Date.now.year,
+      :seasonId => params[:year] || Date.today.year,
       :view => 'mTeam'
     }
     cookie_hash = HTTParty::CookieHash.new
@@ -74,7 +74,7 @@ class Scrape::EspnController < ScrapeController
       espn_s2: params[:espn_s2]
     }
     query_params = {
-      :seasonId => params[:year] || Date.now.year,
+      :seasonId => params[:year] || Date.today.year,
       :view => 'mTeam'
     }
     cookie_hash = HTTParty::CookieHash.new
@@ -90,15 +90,18 @@ class Scrape::EspnController < ScrapeController
       swid: params[:swid],
       espn_s2: params[:espn_s2]
     }
+
+    year = params[:year] || Date.today.year
+
     query_params = {
-      :seasonId => params[:year] || Date.now.year,
+      :seasonId => year,
       :view => 'mTeam'
     }
     cookie_hash = HTTParty::CookieHash.new
     cookie_hash.add_cookies(cookie_from_params)
     response = HTTParty.get(history_url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
     api_mapper = Mappers::ApiMapper.new(response[0]['teams'])
-    error_messages = api_mapper.persist_season_stats(params[:year])
+    error_messages = api_mapper.persist_season_stats(year)
     render :json => { success: true, error_messages: error_messages }
   end
 
@@ -108,7 +111,7 @@ class Scrape::EspnController < ScrapeController
       espn_s2: params[:espn_s2]
     }
     query_params = {
-      :seasonId => params[:year] || Date.now.year,
+      :seasonId => params[:year] || Date.today.year,
       :view => 'mDraftDetail'
     }
     cookie_hash = HTTParty::CookieHash.new
@@ -132,15 +135,18 @@ class Scrape::EspnController < ScrapeController
       swid: params[:swid],
       espn_s2: params[:espn_s2]
     }
+
+    year = params[:year] || Date.today.year
+
     query_params = {
-      :seasonId => params[:year] || Date.now.year,
+      :seasonId => year,
       :view => 'mRoster'
     }
     cookie_hash = HTTParty::CookieHash.new
     cookie_hash.add_cookies(cookie_from_params)
     response = HTTParty.get(history_url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
     api_mapper = Mappers::ApiMapper.new(response[0]['teams'])
-    error_messages = api_mapper.persist_historical_rosters(params[:year])
+    error_messages = api_mapper.persist_historical_rosters(year)
     render :json => { success: true, error_messages: error_messages }
   end
 
@@ -210,15 +216,18 @@ class Scrape::EspnController < ScrapeController
       swid: params[:swid],
       espn_s2: params[:espn_s2]
     }
+
+    year = params[:year] || Date.today.year
+
     query_params = {
-      :seasonId => params[:year] || Date.now.year,
+      :seasonId => year,
       :view => 'mMatchupScore'
     }
     cookie_hash = HTTParty::CookieHash.new
     cookie_hash.add_cookies(cookie_from_params)
     response = HTTParty.get(base_espn_url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
     api_mapper = Mappers::ApiMapper.new(response['schedule'])
-    error_messages = api_mapper.persist_schedule(params[:year])
+    error_messages = api_mapper.persist_schedule(year)
     render :json => { success: true, error_messages: error_messages }
   end
 
@@ -227,15 +236,18 @@ class Scrape::EspnController < ScrapeController
       swid: params[:swid],
       espn_s2: params[:espn_s2]
     }
+
+    year = params[:year] || Date.today.year
+
     query_params = {
-      :seasonId => params[:year] || Date.now.year,
+      :seasonId => year,
       :view => 'mMatchupScore'
     }
     cookie_hash = HTTParty::CookieHash.new
     cookie_hash.add_cookies(cookie_from_params)
     response = HTTParty.get(history_url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
     api_mapper = Mappers::ApiMapper.new(response[0]['schedule'])
-    error_messages = api_mapper.persist_schedule(params[:year])
+    error_messages = api_mapper.persist_schedule(year)
     render :json => { success: true, error_messages: error_messages }
   end
 end
