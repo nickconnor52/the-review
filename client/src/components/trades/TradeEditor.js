@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
-import { useHistory, useParams } from 'react-router-dom'
-import { isUndefined } from 'lodash'
+import { useHistory } from 'react-router-dom'
+import Chips from 'react-chips';
 
-import { createTrade, getTrade, updateTrade, deleteTrade } from './api';
-
-import ReactMde from 'react-mde';
-import ReactMarkdown from 'react-markdown';
-import 'react-mde/lib/styles/css/react-mde-all.css';
+import { createTrade } from './api';
+import { getAllTeams } from '../teams/api';
 
 const EditContainer = styled.div`
   margin-top: 2em;
@@ -15,14 +12,12 @@ const EditContainer = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 100%;
 `
 
-const Label = styled.span`
+const Label = styled.div`
   margin-right: 1em;
   font-weight: bold;
-`
-
-const TitleInput = styled.input`
   margin-bottom: 1em;
 `
 
@@ -30,6 +25,13 @@ const ButtonContainer = styled.div`
   display: flex;
   width: 60%;
   justify-content: center;
+`
+
+const InputContainer = styled.div`
+  display: flex;
+  width: 60%;
+  flex-direction: column;
+  align-items: center;
 `
 
 const Button = styled.a`
@@ -51,72 +53,118 @@ const Button = styled.a`
   `}
 `
 
-const inlineStyle = {
-  width: '60%',
-};
-
-const SummaryContainer = styled.div`
+const TradeContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+`
+
+const TeamContainer = styled.div`
+  display: flex;
+  width: 60%;
+  flex-direction: column;
+  align-items: center;
+`
+
+const InputLabel = styled.div`
+margin-right: 1em;
+font-weight: bold;
+`
+
+const InputRow = styled.div`
+  display: flex;
+  width: 100%;
+  justify-content: center;
   align-items: center;
   margin-bottom: 1em;
-  max-width: 90%
 `
 
 function TradeEditor() {
-  const { id } = useParams();
-  const isNew = isUndefined(id);
-  const [content, setContent] = useState("");
-  const [title, setTitle] = useState("");
-  const [summary, setSummary] = useState("");
-  const [selectedTab, setSelectedTab] = useState("write");
   const history = useHistory();
-
-  const onDelete = () => {
-    if (window.confirm('You serious Clark??')) {
-      deleteTrade({id}).then(() => {
-        history.push(`/trades`)
-      })
-    }
-  }
-
-  const onSave = () => {
-    if (isNew) {
-      createTrade({ title, content, summary }).then((trade) => {
-        history.push(`/trades/${trade.id}`)
-      });
-    } else {
-      updateTrade({ title, content, summary, id}).then((trade) => {
-        history.push(`/trades/${id}`)
-      })
-    }
-  }
+  const [teamAId, setTeamAId] = useState('');
+  const [teamBId, setTeamBId] = useState('');
+  const [teamAPlayerNames, setTeamAPlayerNames] = useState([]);
+  const [teamBPlayerNames, setTeamBPlayerNames] = useState([]);
+  const [date, setDate] = useState('');
+  const [teams, setTeams] = useState([]);
 
   useEffect(() => {
-    if (!isNew) {
-      getTrade(id).then(trade => {
-        setContent(trade.content)
-        setTitle(trade.title)
-        setSummary(trade.summary)
-      })
-    }
-  }, [isNew, id]);
+    getAllTeams().then(response => {
+      setTeams(response)
+    });
+  }, []);
+
+  const onSave = () => {
+    createTrade({ teamAId, teamBId, teamAPlayerNames, teamBPlayerNames, date }).then(() => {
+      history.push(`/trades`)
+    });
+  }
 
   return (
     <EditContainer>
-      <div>
-        <Label>Work in Progress :(</Label>
-      </div>
+      <InputContainer>
+        <Label>New Trade</Label>
+        <TradeContainer>
+          <InputRow>
+            <InputLabel>Date:</InputLabel>
+            <input
+              type='text'
+              name={date}
+              placeholder={'MM/DD/YY'}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </InputRow>
+          <TeamContainer>
+            <div style={{marginBottom: '1em', fontWeight: 'bold'}}>Team A</div>
+            <InputRow>
+              <InputLabel>Title:</InputLabel>
+              <select onChange={(e) => setTeamAId(e.target.value)} id="teamAID">
+                {
+                  teams.map(team => (
+                    <option key={`${team.id}-A`} value={team.id}>{team.current_owner.first_name}</option>
+                  ))
+                }
+              </select>
+            </InputRow>
+            <InputRow>
+                <InputLabel>Player Full Names</InputLabel>
+                <Chips
+                  key='teamAPlayers'
+                  onChange={(names) => setTeamAPlayerNames(names)}
+                  value={teamAPlayerNames}
+                  createChipKeys={["Enter", ","]}
+                />
+            </InputRow>
+          </TeamContainer>
+          <TeamContainer>
+            <div style={{marginBottom: '1em', fontWeight: 'bold'}}>Team B</div>
+            <InputRow>
+              <InputLabel>Title:</InputLabel>
+              <select onChange={(e) => setTeamBId(e.target.value)} id="teamBID">
+                {
+                  teams.map(team => (
+                    <option key={`${team.id}-B`} value={team.id}>{team.current_owner.first_name}</option>
+                  ))
+                }
+              </select>
+            </InputRow>
+            <InputRow>
+                <InputLabel>Player Full Names</InputLabel>
+                <Chips
+                  key='teamBPlayers'
+                  onChange={(names) => setTeamBPlayerNames(names)}
+                  value={teamBPlayerNames}
+                  createChipKeys={["Enter", ","]}
+                />
+            </InputRow>
+          </TeamContainer>
+        </TradeContainer>
+      </InputContainer>
       <ButtonContainer>
         <Button
-          disabled
-          onClick={() => {}}
-        >
-          Delete
-        </Button>
-        <Button
           primary
-          onClick={() => {}}
+          onClick={onSave}
         >
           Save
         </Button>

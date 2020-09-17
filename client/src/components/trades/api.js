@@ -24,14 +24,16 @@ export const getTrade = (id) => {
   })
 }
 
-export const createTrade = ({ content, title, summary }) => {
+export const createTrade = ({ teamAId, teamBId, teamAPlayerNames, teamBPlayerNames, date }) => {
   return axios({
     url: '/api/trades',
     method: 'POST',
     data: {
-      title,
-      content,
-      summary,
+      teamAId,
+      teamBId,
+      teamAPlayerNames,
+      teamBPlayerNames,
+      date
     }
   }).then(response => {
     return response.data || {};

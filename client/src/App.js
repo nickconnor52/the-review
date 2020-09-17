@@ -85,10 +85,7 @@ export default function App() {
             <Route path='/transactions'>
               <Transactions />
             </Route>
-            <Route path='/trades/edit'>
-              <TradeEditor />
-            </Route>
-            <Route path='/trades/:id/edit/'>
+            <Route path='/trades/new'>
               <TradeEditor />
             </Route>
             <Route path='/trades'>

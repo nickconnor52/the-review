@@ -21,7 +21,7 @@ class Team < ActiveRecord::Base
   end
 
   def team_info
-    TeamIdentifier.where(team_id: self.id).last
+    TeamIdentifier.where(team_id: self.id).order(:created_at => :asc).last
   end
 
   def past_team_info

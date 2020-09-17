@@ -27,6 +27,9 @@ class TransactionPiece < ActiveRecord::Base
       Player.find(player_id).full_name
     elsif draft_pick_id.present?
       draft_player_id = DraftPick.find(draft_pick_id).player_id
+      if draft_player_id.nil?
+        return 'Did Not Pick'
+      end
       player = Player.find(draft_player_id)
       player.full_name unless player.nil?
     end

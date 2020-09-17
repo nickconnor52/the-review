@@ -10,11 +10,13 @@ const NavigationContainer = styled.div`
   background-color: ${colors.washedPurple};
 `
 
+// TODO: FIX OVERFLOW WHEN YOU HAVE TIME FOR MOBILE
 const NavLinksContainer = styled.div`
   display: flex;
   align-items: center;
   flex-grow: 2;
   padding-right: 1em;
+  overflow: scroll;
 `
 
 const LogoContainer = styled.div`

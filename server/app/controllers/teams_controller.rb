@@ -4,7 +4,7 @@ class TeamsController < ApplicationController
   def index
     teams = Team.all.order created_at: :desc
 
-    render :json => teams, :include => [:team_info]
+    render :json => teams, :include => [:team_info, :current_owner]
   end
 
   def show

@@ -121,16 +121,10 @@ function TransactionPieceDisplay(props) {
       <div style={{marginBottom: '0.5em'}}>
         <DraftPick>{draftYear} {roundNumber()} Round Pick</DraftPick>
         {
-          draftPick.player_id ?
-            (
-            <div>
-              <PickPlayer key={draftPick.id} >Pick {draftPick.round_pick_number}:</PickPlayer>
-              <PickPlayer key={`${draftPick.id}-${displayName}`}>{displayName}</PickPlayer>
-            </div>
-            ) :
-            (
-              null
-            )
+          <div>
+            <PickPlayer key={draftPick.id} >Pick {draftPick.round_pick_number}:</PickPlayer>
+            <PickPlayer key={`${draftPick.id}-${displayName}`}>{displayName}</PickPlayer>
+          </div>
         }
       </div>
     );
