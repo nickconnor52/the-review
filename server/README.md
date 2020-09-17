@@ -32,7 +32,17 @@ Backend Heroku App -- heroku-api
 
 - Grabs the results from all games of the year, updates Game table
 
+`/sync_teams`
+
+- Check for any new team names
+
 `rake data:fetch_projections`
 
 - Grab all player projection data for the season in the rake file
+
+### Note:
+
+If a sequence gets out of sync due to fooling around with data, reset it with the following -
+
+``` ALTER SEQUENCE [table_name_id_seq] RESTART WITH [next_value] ```
 

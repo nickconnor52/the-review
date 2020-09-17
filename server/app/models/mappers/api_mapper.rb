@@ -220,8 +220,6 @@ class Mappers::TeamMapper
     team = Team.find_or_initialize_by(espn_id: @espn_id)
     team.save
     team_info = TeamIdentifier.find_or_initialize_by(team_id: team.to_param, location: @location, nickname: @nickname)
-    team_info.location = @location
-    team_info.nickname = @nickname
     team_info.abbreviation = @abbreviation
     team_info.logo_url = @logo_url
     team_info.save
