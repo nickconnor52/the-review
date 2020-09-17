@@ -37,9 +37,12 @@ const Subtitle = styled.div`
 const Label = styled.div`
   font-weight: bold;
   margin-right: 1em;
+  text-align: center;
 `
 
-const Value = styled.div``
+const Value = styled.div`
+  text-align: center;
+`
 
 const TradeCard = styled.div`
   display: flex;
@@ -71,12 +74,67 @@ const TeamColumn = styled.div`
 `
 
 const TeamName = styled.div`
+  text-align: center;
   font-weight: bold;
   font-size: 1.25em;
   margin-bottom: 1rem;
 `
 
-const PlayerView = styled.div``
+const PlayerView = styled.div`
+  margin-bottom: 0.5em;
+`
+
+const DraftPick = styled.div`
+
+`
+
+const PickPlayer = styled.div`
+  color: grey;
+  font-size: 0.8em;
+  text-align: center;
+`
+
+
+
+function TransactionPieceDisplay(props) {
+  const { display_name: displayName, player_id: playerId, id, draft_pick: draftPick } = props;
+  const roundNumber = () => {
+    switch (draftPick.round_number) {
+      case '1':
+        return '1st'
+      case '2':
+        return '2nd'
+      case '3':
+        return '3rd'
+      default:
+        return 'Unknown Round'
+    }
+  };
+
+  return playerId ?
+    (
+      <PlayerView key={id}>
+        {displayName}
+      </PlayerView>
+    ) :
+    (
+      <div style={{marginBottom: '0.5em'}}>
+        <DraftPick>{roundNumber()} Round Pick</DraftPick>
+        {
+          draftPick.player_id ?
+            (
+            <div>
+              <PickPlayer key={draftPick.id} >Pick {draftPick.round_pick_number}:</PickPlayer>
+              <PickPlayer key={`${draftPick.id}-${displayName}`}>{displayName}</PickPlayer>
+            </div>
+            ) :
+            (
+              null
+            )
+        }
+      </div>
+    );
+}
 
 function TradeView(props) {
   const { accepted_date: acceptedDate, teams, transaction_pieces: transactionPieces } = props;
@@ -87,7 +145,7 @@ function TradeView(props) {
   return (
     <TradeCard>
       <Subtitle>
-        <Label>Accepted On: </Label>
+        <Label>Accepted</Label>
         <Value>{moment(acceptedDate).format('MMMM Do, YYYY')}</Value>
       </Subtitle>
       <TeamsContainer>
@@ -96,9 +154,7 @@ function TradeView(props) {
           <div style={{fontStyle: 'italic', marginBottom: '1em' }}>Received</div>
           {
             teamAPieces.map(piece => (
-              <PlayerView key={piece.id}>
-                {piece.player.full_name}
-              </PlayerView>
+              <TransactionPieceDisplay key={piece.id} {...piece} />
             ))
           }
         </TeamColumn>
@@ -107,9 +163,7 @@ function TradeView(props) {
           <div style={{fontStyle: 'italic', marginBottom: '1em' }}>Received</div>
           {
             teamBPieces.map(piece => (
-              <PlayerView key={piece.id}>
-                {piece.player.full_name}
-              </PlayerView>
+              <TransactionPieceDisplay key={piece.id} {...piece} />
             ))
           }
         </TeamColumn>
@@ -133,7 +187,7 @@ function TradeCenter() {
         <TeamHeader>Trade Center</TeamHeader>
         {
           trades.map(trade => (
-            <TradeView {...trade} />
+            <TradeView key={trade.id} {...trade} />
           ))
         }
       </BodyContainer>

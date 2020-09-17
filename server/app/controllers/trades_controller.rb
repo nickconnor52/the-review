@@ -11,7 +11,8 @@ class TradesController < ApplicationController
       },
       {
         :transaction_pieces => {
-          :include => [:source_team, :receiving_team, :player]
+          :include => [:source_team, :receiving_team, :player, :draft_pick],
+          :methods => [:display_name]
         }
       }
     ]
@@ -26,7 +27,13 @@ class TradesController < ApplicationController
       },
       {
         :transaction_pieces => {
-          :include => [:source_team, :receiving_team, :player]
+          :include => [
+            :source_team,
+            :receiving_team,
+            :player,
+            :draft_pick,
+            :display_name
+          ]
         }
       }
     ]
