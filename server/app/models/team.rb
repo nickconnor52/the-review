@@ -38,7 +38,7 @@ class Team < ActiveRecord::Base
 
   def original_players
     original_picks = DraftPick.where(draft_id: '1', team_id: id).pluck(:player_id)
-    players_with_transactions = TransactionPiece.where(player_id: original_picks).pluck(:player_id)
+    players_with_transactions = TransactionPiece.where(player_id: original_picks).where.not(action_type: 'LINEUP').pluck(:player_id)
     players.where(id: original_picks).where.not(id: players_with_transactions).pluck(:full_name)
   end
 end
