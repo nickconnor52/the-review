@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import RosterTable from './RosterTable';
+import DataTable from '../../core/DataTable';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import moment from 'moment';
+import { get } from 'lodash';
 import { sm } from '../../core/style';
 
 import { getTeam, getTeamTransactions, getRoster } from './api';
@@ -115,6 +116,13 @@ const ListItem = styled.div`
   margin-bottom: 0.5em;
 `
 
+const TableContainer = styled.div`
+  display: flex;
+  margin-top: 2em;
+  width: 90%;
+  height: 400px;
+`
+
 function Team() {
   const [team, setTeam] = useState({});
   const [transactions, setTransactions] = useState([]);
@@ -151,6 +159,20 @@ function Team() {
       setRoster(response)
     });
   }, [rosterYear]);
+
+  const rowData = roster.map(player => ({
+    fullName: player.full_name,
+    position: get(player, ['position', 'abbreviation'], 'Not Listed'),
+    team: get(player, ['pro_team', 'name'], 'Not Listed'),
+    number: player.jersey_number,
+  }));
+
+  const columnDefs = [
+    { headerName: 'Player', field: 'fullName' },
+    { headerName: 'Position', field: 'position' },
+    { headerName: 'Team', field: 'team' },
+    { headerName: 'Number', field: 'number' },
+  ]
 
   return (
     <PageContainer>
@@ -215,7 +237,9 @@ function Team() {
               </select>
             </YearDropdown>
           </HeaderBar>
-          <RosterTable roster={roster} />
+          <TableContainer>
+            <DataTable rowData={rowData} columnDefs={columnDefs} />
+          </TableContainer>
         </ContentContainer>
       </BodyContainer>
     </PageContainer>
