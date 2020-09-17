@@ -30,4 +30,8 @@ class Team < ActiveRecord::Base
       .order(created_at: :desc)
       .all[1..-1]
   end
+
+  def trade_count
+    player_transactions.where(transaction_type: 'TRADE_ACCEPT').count
+  end
 end

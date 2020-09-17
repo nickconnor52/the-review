@@ -8,17 +8,21 @@ class TeamsController < ApplicationController
   end
 
   def show
-    render :json => @team, :include => [
-      :current_owner,
-      :team_info,
-      :past_team_info,
-      :roster => {
-        :include => [
-          :pro_team,
-          :position
-        ]
-      }
-    ]
+    render :json => @team,
+      :include => [
+        :current_owner,
+        :team_info,
+        :past_team_info,
+        :roster => {
+          :include => [
+            :pro_team,
+            :position
+          ]
+        }
+      ],
+      :methods => [
+        :trade_count
+      ]
   end
 
   def team_transactions

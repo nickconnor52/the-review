@@ -141,6 +141,7 @@ function Team() {
   const owner_name = `${current_owner.first_name || ''} ${current_owner.last_name || ''}`
   const owner_location = current_owner.city || '';
   const acquire_date = current_owner.season_joined || '';
+  const trade_count = team.trade_count || '0';
 
   useEffect(() => {
     getTeam(id).then(response => {
@@ -195,6 +196,10 @@ function Team() {
               <InfoItem>
                 <Label>Acquired Team:</Label>
                 <Value>{acquire_date}</Value>
+              </InfoItem>
+              <InfoItem>
+                <Label>Total Trades:</Label>
+                <Value>{trade_count}</Value>
               </InfoItem>
               <InfoItem>
                 <Label>Established:</Label>
