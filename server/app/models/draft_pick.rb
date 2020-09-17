@@ -6,6 +6,6 @@ class DraftPick < ActiveRecord::Base
   end
 
   def team_info
-    TeamIdentifier.where(team_id: team_id).last
+    TeamIdentifier.where(team_id: team_id).order(:created_at => :asc).last
   end
 end
