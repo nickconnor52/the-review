@@ -164,6 +164,7 @@ class Scrape::EspnController < ScrapeController
     render :json => { success: true, error_messages: error_messages }
   end
 
+  # TODO: THE BID AMOUNT IS CURRENTLY BROKEN
   def sync_transactions
     cookie_from_params = {
       swid: params[:swid],

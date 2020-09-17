@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
     resources :trades
     resources :transactions
+    resources :drafts, param: :year
 
     namespace :scrape do
       get 'sync_players_by_year' => 'espn#sync_players_by_year'

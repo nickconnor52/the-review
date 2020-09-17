@@ -13,6 +13,7 @@ import Team from './components/teams/Team';
 import Transactions from './components/transactions/Transactions';
 import TradeCenter from './components/trades/TradeCenter';
 import TradeEditor from './components/trades/TradeEditor';
+import DraftRoom from './components/drafts/DraftRoom';
 import PostsDirectory from './components/posts/PostsDirectory';
 import Post from './components/posts/Post';
 import PostEditor from './components/posts/PostEditor';
@@ -92,6 +93,9 @@ export default function App() {
             </Route>
             <Route path='/trades'>
               <TradeCenter />
+            </Route>
+            <Route path='/drafts'>
+              <DraftRoom />
             </Route>
             <Route path='/'>
               <Home />

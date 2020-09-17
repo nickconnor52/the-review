@@ -66,6 +66,8 @@ function NavigationBar() {
         <NavItem path="/" name="Home" />
         <NavItem path="/posts" name="Posts" />
         <NavItem path="/teams" name="Teams" />
+        <NavItem path="/trades" name="Trade Center" />
+        <NavItem path="/drafts" name="Draft Room" />
       </NavLinksContainer>
     </NavigationContainer>
   );
