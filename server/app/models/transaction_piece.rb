@@ -18,6 +18,10 @@ class TransactionPiece < ActiveRecord::Base
     Team.find(self.from_team_id).team_info
   end
 
+  def draft_year
+    DraftPick.find(draft_pick_id).draft.year if draft_pick_id.present?
+  end
+
   def display_name
     if player_id.present?
       Player.find(player_id).full_name

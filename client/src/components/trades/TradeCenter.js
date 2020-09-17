@@ -97,7 +97,7 @@ const PickPlayer = styled.div`
 
 
 function TransactionPieceDisplay(props) {
-  const { display_name: displayName, player_id: playerId, id, draft_pick: draftPick } = props;
+  const { display_name: displayName, player_id: playerId, id, draft_pick: draftPick, draft_year: draftYear } = props;
   const roundNumber = () => {
     switch (draftPick.round_number) {
       case '1':
@@ -119,7 +119,7 @@ function TransactionPieceDisplay(props) {
     ) :
     (
       <div style={{marginBottom: '0.5em'}}>
-        <DraftPick>{roundNumber()} Round Pick</DraftPick>
+        <DraftPick>{draftYear} {roundNumber()} Round Pick</DraftPick>
         {
           draftPick.player_id ?
             (
