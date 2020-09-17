@@ -21,7 +21,8 @@ class TeamsController < ApplicationController
         }
       ],
       :methods => [
-        :trade_count
+        :trade_count,
+        :original_players
       ]
   end
 

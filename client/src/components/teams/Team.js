@@ -142,6 +142,7 @@ function Team() {
   const owner_location = current_owner.city || '';
   const acquire_date = current_owner.season_joined || '';
   const trade_count = team.trade_count || '0';
+  const original_players = team.original_players || [];
 
   useEffect(() => {
     getTeam(id).then(response => {
@@ -200,6 +201,26 @@ function Team() {
               <InfoItem>
                 <Label>Total Trades:</Label>
                 <Value>{trade_count}</Value>
+              </InfoItem>
+              <InfoItem>
+                <Label>The Real OG Squad Squad:</Label>
+                {
+                original_players.length !== 0 ?
+                (
+                  <ValueList>
+                    {
+                      original_players.map(player => (
+                        <ListItem key={`${player}`}>
+                          {player}
+                        </ListItem>
+                      ))
+                    }
+                  </ValueList>
+                ) :
+                (
+                  <Value>No Day Ones</Value>
+                )
+              }
               </InfoItem>
               <InfoItem>
                 <Label>Established:</Label>
