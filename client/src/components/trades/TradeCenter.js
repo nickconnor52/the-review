@@ -85,7 +85,7 @@ const PlayerView = styled.div`
 `
 
 const DraftPick = styled.div`
-
+  text-align: center;
 `
 
 const PickPlayer = styled.div`
