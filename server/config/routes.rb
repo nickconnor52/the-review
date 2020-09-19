@@ -1,6 +1,13 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   scope path: 'api' do
+    resource :users, only: [:create]
+
+    # Authentication Routes
+    post "/login", to: "auth#login"
+    get "/auto_login", to: "auth#auto_login"
+    get "/user_is_authed", to: "auth#user_is_authed"
+
     resources :posts
     resources :teams do
       member do
