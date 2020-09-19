@@ -11,6 +11,7 @@ import { ActiveUserProvider, useActiveUserState, useActiveUserDispatch } from '.
 
 import NavigationBar from './components/NavigationBar';
 import Login from './components/users/Login'
+import CreateUser from './components/users/CreateUser'
 import Teams from './components/teams/Teams';
 import Team from './components/teams/Team';
 import Transactions from './components/transactions/Transactions';
@@ -89,6 +90,9 @@ function AppWithContext() {
           <Switch>
             <Route path='/users/login'>
               <Login />
+            </Route>
+            <Route path='/users/create'>
+              <CreateUser />
             </Route>
             <Route path='/teams/:id'>
               <Team />

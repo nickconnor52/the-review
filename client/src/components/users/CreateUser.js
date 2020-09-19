@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
-import { login } from './api';
+import { createUser } from './api';
 import { useHistory } from 'react-router-dom'
 import { useActiveUserDispatch } from '../../context/ActiveUserContext'
 
@@ -45,13 +45,12 @@ const ButtonContainer = styled.div`
 `
 
 const Button = styled.a`
-  width: 5em;
   text-align: center;
   display: inline-block;
   border-radius: 3px;
   padding: 0.5rem 0;
   margin: 0.5rem 1rem;
-  width: 8em;
+  width: 5em;
   background: transparent;
   color: #444444;
   border: 2px solid #444444;
@@ -68,14 +67,17 @@ const InputElement = styled.input`
   width: 14em;
 `
 
-function Login() {
+function CreateUser() {
   const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useActiveUserDispatch();
   const history = useHistory();
 
-  const onLogin = () => {
-    login({email, password}).then(response => {
+  const onCreate = () => {
+    createUser({email, username, firstName, lastName, password}).then(response => {
       if (!response.errors) {
         dispatch({ type: 'SET_ACTIVE_USER', user: response.user, token: response.jwt})
         localStorage.setItem('token', response.jwt)
@@ -85,20 +87,16 @@ function Login() {
     })
   }
 
-  const onCreate = () => {
-    history.push('/users/create')
-  }
-
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      onLogin();
+      onCreate();
     }
   }
 
   return (
     <Container>
       <Header>
-        Login
+        Create Account
       </Header>
       <FieldsContainer>
         <InputRow>
@@ -109,6 +107,36 @@ function Login() {
             name='email'
             placeholder='Enter Email'
             onChange={(e) => setEmail(e.target.value)}
+          />
+        </InputRow>
+        <InputRow>
+          <InputLabel>Username:</InputLabel>
+          <InputElement
+            type='text'
+            value={username}
+            name='username'
+            placeholder='Enter Username'
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </InputRow>
+        <InputRow>
+          <InputLabel>First Name:</InputLabel>
+          <InputElement
+            type='text'
+            value={firstName}
+            name='firstName'
+            placeholder='Enter First Name'
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+        </InputRow>
+        <InputRow>
+          <InputLabel>Last Name:</InputLabel>
+          <InputElement
+            type='text'
+            value={lastName}
+            name='lastName'
+            placeholder='Enter Last Name'
+            onChange={(e) => setLastName(e.target.value)}
           />
         </InputRow>
         <InputRow>
@@ -129,16 +157,10 @@ function Login() {
           >
             Create Account
           </Button>
-          <Button
-            primary
-            onClick={onLogin}
-          >
-            Login
-          </Button>
         </ButtonContainer>
       </FieldsContainer>
     </Container>
   );
 }
 
-export default Login;
+export default CreateUser;

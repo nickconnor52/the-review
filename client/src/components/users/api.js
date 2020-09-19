@@ -1,5 +1,23 @@
 import axios from 'axios'
 
+export const createUser = ({ email, username, firstName, lastName, password }) => {
+  return axios({
+    url: '/api/users',
+    method: 'POST',
+    data: {
+      email,
+      username,
+      first_name: firstName,
+      last_name: lastName,
+      password,
+    }
+  }).then(response => {
+    return response.data || {};
+  }).catch(response => {
+    console.log(response);
+  });
+}
+
 export const login = ({ email, password }) => {
   return axios({
     url: '/api/login',

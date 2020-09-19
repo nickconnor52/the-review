@@ -20,7 +20,6 @@ function activeActiveUserReducer(state, action) {
 function ActiveUserProvider({children}) {
   const userFromStorage = JSON.parse(localStorage.getItem('activeUser'))
   const [state, dispatch] = React.useReducer(activeActiveUserReducer, { ...userFromStorage })
-  console.log(state)
   return (
     <ActiveUserStateContext.Provider value={state}>
       <ActiveUserDispatchContext.Provider value={dispatch}>
