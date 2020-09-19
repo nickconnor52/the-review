@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import DataTable from '../../core/DataTable';
-import { get, sortBy } from 'lodash';
+import { get } from 'lodash';
 import { getDraftByYear } from './api';
 
 const PageContainer = styled.div`

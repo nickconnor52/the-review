@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -7,7 +7,10 @@ import {
 import styled from 'styled-components';
 import { colors, sm } from './core/style';
 
+import { ActiveUserProvider, useActiveUserState, useActiveUserDispatch } from './context/ActiveUserContext';
+
 import NavigationBar from './components/NavigationBar';
+import Login from './components/users/Login'
 import Teams from './components/teams/Teams';
 import Team from './components/teams/Team';
 import Transactions from './components/transactions/Transactions';
@@ -21,6 +24,8 @@ import PostEditor from './components/posts/PostEditor';
 import Markdown from 'react-markdown';
 import 'github-markdown-css';
 import axios from 'axios';
+
+import { autoLogin } from './components/users/api'
 
 if (process.env.NODE_ENV === 'production') {
   console.log(process.env.REACT_APP_API_BASE_URL)
@@ -56,7 +61,25 @@ const Break = styled.hr`
   background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
 `
 
-export default function App() {
+function AppWithContext() {
+  // Authentication Check
+  const dispatch = useActiveUserDispatch();
+  useEffect(() => {
+    const token = localStorage.getItem('token')
+    if (token) {
+      autoLogin(token).then(response => {
+        if (!response.errors) {
+          localStorage.setItem('activeUser', JSON.stringify(response))
+          dispatch({type: 'SET_ACTIVE_USER', user: response, token })
+        } else {
+          localStorage.setItem('token', null)
+          localStorage.setItem('activeUser', null)
+          dispatch({type: 'REMOVE_ACTIVE_USER' })
+        }
+      })
+    }
+  }, [])
+
   return (
     <Router>
       <PageBody>
@@ -64,6 +87,9 @@ export default function App() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
+            <Route path='/users/login'>
+              <Login />
+            </Route>
             <Route path='/teams/:id'>
               <Team />
             </Route>
@@ -107,6 +133,14 @@ export default function App() {
       </Footer>
     </Router>
   );
+}
+
+export default function App() {
+  return (
+    <ActiveUserProvider>
+      <AppWithContext />
+    </ActiveUserProvider>
+  )
 }
 
 const HomeContainer = styled.div`

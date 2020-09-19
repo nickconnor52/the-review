@@ -2,6 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { colors, sm } from '../core/style';
+import { isEmpty } from 'lodash'
+import { useActiveUserState, useActiveUserDispatch } from '../context/ActiveUserContext'
 
 const NavigationContainer = styled.div`
   display: flex;
@@ -16,6 +18,7 @@ const NavLinksContainer = styled.div`
   align-items: center;
   flex-grow: 2;
   padding-right: 1em;
+  padding-left: 1em;
   overflow: scroll;
 `
 
@@ -43,6 +46,27 @@ const NavButton = styled.div`
   }
 `
 
+const UserContainer = styled.div`
+  display: flex;
+  padding-right: 2em;
+  padding-left: 2em;
+  font-weight: bold;
+`
+
+const LoginButton = styled.div`
+  cursor: pointer;
+
+  a {
+    color: ${colors.lightGrey};
+    text-decoration: none
+  }
+`
+
+const LogoutButton = styled.div`
+  cursor: pointer;
+  color: ${colors.lightGrey};
+`
+
 function NavItem(props) {
   const { path, name } = props;
   const location = useLocation();
@@ -58,6 +82,14 @@ function NavItem(props) {
 
 function NavigationBar() {
   const history = useHistory();
+  const activeUser = useActiveUserState();
+  const dispatch = useActiveUserDispatch();
+
+  const onLogout = () => {
+    localStorage.setItem('token', null)
+    localStorage.setItem('activeUser', null)
+    dispatch({type: 'REMOVE_ACTIVE_USER' })
+  }
 
   return (
     <NavigationContainer>
@@ -71,6 +103,23 @@ function NavigationBar() {
         <NavItem path="/trades" name="Trade Center" />
         <NavItem path="/drafts" name="Draft Room" />
       </NavLinksContainer>
+      <UserContainer>
+        {
+          !isEmpty(activeUser) ?
+            (
+              <LogoutButton onClick={onLogout}>
+                Logout
+              </LogoutButton>
+            ) :
+            (
+              <LoginButton>
+                <Link to={'/users/login'}>
+                  Login
+                </Link>
+              </LoginButton>
+            )
+        }
+      </UserContainer>
     </NavigationContainer>
   );
 }
