@@ -10,7 +10,15 @@ class PostsController < ApplicationController
   end
 
   def show
-    render :json => @post, :include => [:user]
+    render :json => @post, :include => [
+      :user,
+      {
+        :comments => {
+          :include => [:author, :child_comments]
+        }
+      }
+
+    ]
   end
 
   def create

@@ -7,7 +7,7 @@ import {
 import styled from 'styled-components';
 import { colors, sm } from './core/style';
 
-import { ActiveUserProvider, useActiveUserState, useActiveUserDispatch } from './context/ActiveUserContext';
+import { ActiveUserProvider, useActiveUserDispatch } from './context/ActiveUserContext';
 
 import NavigationBar from './components/NavigationBar';
 import Login from './components/users/Login'
@@ -79,7 +79,7 @@ function AppWithContext() {
         }
       })
     }
-  }, [])
+  }, [dispatch])
 
   return (
     <Router>

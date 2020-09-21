@@ -148,19 +148,19 @@ function Team() {
     getTeam(id).then(response => {
       setTeam(response)
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     getTeamTransactions(id).then(response => {
       setTransactions(response)
     });
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     getRoster(id, rosterYear).then(response => {
       setRoster(response)
     });
-  }, [rosterYear]);
+  }, [rosterYear, id]);
 
   const rowData = roster.map(player => ({
     fullName: player.full_name,

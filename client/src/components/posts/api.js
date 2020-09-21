@@ -64,3 +64,23 @@ export const deletePost = ({ id }) => {
     console.log(response);
   });
 }
+
+export const saveComment = ({ body, userId, postId }) => {
+  const token = localStorage.getItem('token')
+  return axios({
+    url: `/api/comments`,
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${token}`
+    },
+    data: {
+      body,
+      user_id: userId.toString(),
+      post_id: postId,
+    }
+  }).then(response => {
+    return response.data || {};
+  }).catch(response => {
+    console.log(response);
+  });
+}

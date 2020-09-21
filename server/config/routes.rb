@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get "/user_is_authed", to: "auth#user_is_authed"
 
     resources :posts
+    resources :comments
     resources :teams do
       member do
         get 'transactions', to: 'teams#team_transactions'
