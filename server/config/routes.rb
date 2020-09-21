@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       get 'sync_schedule' => 'espn#sync_schedule'
       get 'sync_historical_schedule' => 'espn#sync_historical_schedule'
       get 'sync_final_season_stats' => 'espn#sync_final_season_stats'
+      get 'sync_player_stats' => 'espn#sync_player_stats'
     end
   end
 end

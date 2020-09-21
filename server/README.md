@@ -21,7 +21,6 @@ Backend Heroku App -- heroku-api
 
 ## Important Recurring API Calls
 `/sync_active_lineups`
-
 - Syncs All Current Rosters (updates player team_id to current team)
 
 `/sync_new_transactions`
@@ -36,9 +35,12 @@ Backend Heroku App -- heroku-api
 
 - Check for any new team names
 
-`rake data:fetch_projections`
+`/sync_player_stats`
 
 - Grab all player projection data for the season in the rake file
+
+- (also available as Rake Task):
+`rake data:fetch_projections`
 
 ### Note:
 

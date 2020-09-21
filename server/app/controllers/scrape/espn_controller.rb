@@ -250,4 +250,33 @@ class Scrape::EspnController < ScrapeController
     error_messages = api_mapper.persist_schedule(year)
     render :json => { success: true, error_messages: error_messages }
   end
+
+  def sync_player_stats
+    cookie_from_params = {
+      swid: params[:swid],
+      espn_s2: params[:espn_s2]
+    }
+
+    filter_hash = HTTParty::CookieHash.new
+    cookie_hash = HTTParty::CookieHash.new
+    cookie_hash.add_cookies(cookie_from_params)
+
+    year = params[:year] || Date.today.year
+
+    url = "https://fantasy.espn.com/apis/v3/games/ffl/seasons/#{year}/segments/0/leagues/#{ENV['LEAGUE_ID']}?view=mMatchup&view=mMatchupScore"
+
+    error_messages = []
+
+    (1..17).each do |week|
+      query_params = {
+        :view => 'mMatchupScore',
+        :scoringPeriodId => week
+      }
+      response = HTTParty.get(url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
+      api_mapper = Mappers::ApiMapper.new(response['schedule'])
+      error_messages += api_mapper.persist_player_stats(year, week)
+    end
+
+    render :json => { success: true, error_messages: error_messages }
+  end
 end
