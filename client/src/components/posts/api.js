@@ -1,8 +1,20 @@
 import axios from 'axios';
 
-export const getAllPosts = () => {
+export const getAllChatter = () => {
   return axios({
-    url: '/api/posts',
+    url: '/api/posts/chatter',
+    method: 'GET',
+  }).then(response => {
+    return response.data || [];
+  }).catch(response => {
+    console.log(response);
+    return [];
+  });
+}
+
+export const getAllRamblings = () => {
+  return axios({
+    url: '/api/posts/ramblings',
     method: 'GET',
   }).then(response => {
     return response.data || [];
@@ -24,7 +36,7 @@ export const getPost = (id) => {
   })
 }
 
-export const createPost = ({ content, title, summary }) => {
+export const createPost = ({ userId, isChatter, content, title, summary }) => {
   return axios({
     url: '/api/posts',
     method: 'POST',
@@ -32,6 +44,8 @@ export const createPost = ({ content, title, summary }) => {
       title,
       content,
       summary,
+      user_id: userId,
+      post_type: isChatter ? 'chatter' : 'rambling'
     },
     headers: {
       Authorization: `Bearer ${localStorage.getItem('token')}`
@@ -84,7 +98,7 @@ export const saveComment = ({ body, userId, postId }) => {
     },
     data: {
       body,
-      user_id: userId.toString(),
+      user_id: userId,
       post_id: postId,
     }
   }).then(response => {

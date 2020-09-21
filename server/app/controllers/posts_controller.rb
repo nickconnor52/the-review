@@ -3,8 +3,14 @@ class PostsController < ApplicationController
   before_action :find_post, only: [:show, :update, :destroy]
   before_action :require_login, only: [:create, :update, :destroy]
 
-  def index
-    posts = Post.all.order created_at: :desc
+  def chatter
+    posts = Post.where(post_type: 'chatter').order created_at: :desc
+
+    render :json => posts, :include => [:user]
+  end
+
+  def ramblings
+    posts = Post.where(post_type: 'rambling').order created_at: :desc
 
     render :json => posts, :include => [:user]
   end
@@ -42,7 +48,7 @@ class PostsController < ApplicationController
 
   private
   def create_post
-    @user = User.find_by(role: 'system_admin')
+    @user = User.find(params[:user_id])
     @post = Post.new(post_params)
     @post.user = @user
     @post.save!
@@ -53,6 +59,6 @@ class PostsController < ApplicationController
   end
 
   def post_params
-    params.permit(:id, :title, :content, :summary)
+    params.permit(:id, :title, :content, :summary, :post_type)
   end
 end

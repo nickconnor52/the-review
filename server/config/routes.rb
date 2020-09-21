@@ -8,7 +8,12 @@ Rails.application.routes.draw do
     get "/auto_login", to: "auth#auto_login"
     get "/user_is_authed", to: "auth#user_is_authed"
 
-    resources :posts
+    resources :posts do
+      collection do
+        get 'chatter', to: 'posts#chatter'
+        get 'ramblings', to: 'posts#ramblings'
+      end
+    end
     resources :comments
     resources :teams do
       member do

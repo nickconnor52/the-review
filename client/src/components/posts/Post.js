@@ -56,7 +56,7 @@ const CommentContainer = styled.div`
 
 const ReplyContainer = styled.div``
 
-const InfoContainer = styled.div`
+const CommentInfoContainer = styled.div`
   margin-bottom: 0.5em;
   display: flex;
   justify-content: space-between;
@@ -67,11 +67,11 @@ const InfoContainer = styled.div`
   }
 `
 
-const Author = styled.div`
+const CommentAuthor = styled.div`
   font-weight: bold;
 `
 
-const Date = styled.div`
+const CommentDate = styled.div`
   color: ${colors.midGrey};
   font-weight: 300;
   font-size: 0.8em;
@@ -103,6 +103,34 @@ const Button = styled.a`
   `}
 `
 
+const Author = styled.div`
+  font-weight: 600;
+  font-size: 0.8em;
+  margin-right: 1em;
+`
+const Date = styled.div`
+  color: ${colors.midGrey};
+  font-weight: 300;
+  font-size: 0.8em;
+`
+
+const InfoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 1em;
+`
+
+const Break = styled.hr`
+  border: 0;
+  margin-top: 0;
+  height: 1px;
+  background-image: -webkit-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -moz-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -ms-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+  background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
+`
+
 const MyImage = props => {
   const [fullSize, setFullSize] = useState();
   const handleClick = () => {
@@ -126,14 +154,14 @@ function Comment(props) {
 
   return (
     <CommentContainer>
-      <InfoContainer>
-        <Author>
+      <CommentInfoContainer>
+        <CommentAuthor>
           {username}
-        </Author>
-        <Date>
+        </CommentAuthor>
+        <CommentDate>
           {date}
-        </Date>
-      </InfoContainer>
+        </CommentDate>
+      </CommentInfoContainer>
       <BodyContainer>
         {body}
       </BodyContainer>
@@ -145,10 +173,11 @@ function Post() {
   const { id } = useParams();
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [username, setUsername] = useState('');
+  const [createdDate, setCreatedDate] = useState('');
   const [comments, setComments] = useState([]);
   const [newCommentBody, setNewCommentBody] = useState("");
   const activeUser = useActiveUserState();
-
   const renderers = {
     image: MyImage
   };
@@ -156,6 +185,8 @@ function Post() {
   useEffect(() => {
     getPost(id).then(post => {
       setTitle(post.title)
+      setUsername(`${post.user.first_name} ${post.user.last_name}`)
+      setCreatedDate(moment(post.created_at).format('MMMM Do, YYYY'))
       setContent(post.content)
       setComments(post.comments)
     })
@@ -175,20 +206,33 @@ function Post() {
   return (
     <PostContainer>
       <Title>{title}</Title>
+      <InfoContainer>
+        <Author>{username}:</Author>
+        <Date>{createdDate}</Date>
+      </InfoContainer>
       <div style={bodyStyle} className="markdown-body">
         <Markdown
           source={content}
           renderers={renderers}
         />
       </div>
+      <div style={{marginTop: '2em', width: '100%'}}>
+        <Break />
+      </div>
       <CommentsContainer>
         <Header style={{ marginBottom: '1em' }}>
           Comments
         </Header>
         {
-          comments.map(comment => (
-            <Comment key={comment.id} {...comment} />
-          ))
+          comments.length !== 0 ?
+            (
+              comments.map(comment => (
+                <Comment key={comment.id} {...comment} />
+              ))
+            ) :
+            (
+              <div style={{marginBottom: '2em', fontStyle: 'italic'}}>It's awfully quiet in here</div>
+            )
         }
         {
           !isEmpty(activeUser) ?

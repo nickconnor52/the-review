@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import { useHistory, useParams } from 'react-router-dom'
 import { isUndefined } from 'lodash'
+import { useActiveUserState } from '../../context/ActiveUserContext'
 
 import { createPost, getPost, updatePost, deletePost } from './api';
 
@@ -64,31 +65,33 @@ const SummaryContainer = styled.div`
 `
 
 function PostEditor(props) {
+  const { isChatter } = props;
   const { id } = useParams();
-  console.log(props)
   const isNew = isUndefined(id);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [summary, setSummary] = useState("");
   const [selectedTab, setSelectedTab] = useState("write");
   const history = useHistory();
-
+  const path = isChatter ? '/chatter' : '/ramblings'
+  const activeUser = useActiveUserState();
   const onDelete = () => {
     if (window.confirm('You serious Clark??')) {
       deletePost({id}).then(() => {
-        history.push(`/ramblings`)
+        history.push(path)
       })
     }
   }
 
+  const userId = activeUser.id || '';
   const onSave = () => {
     if (isNew) {
-      createPost({ title, content, summary }).then((post) => {
-        history.push(`/ramblings/${post.id}`)
+      createPost({ isChatter, title, content, summary, userId }).then((post) => {
+        history.push(`${path}/${post.id}`)
       });
     } else {
       updatePost({ title, content, summary, id}).then((post) => {
-        history.push(`/ramblings/${id}`)
+        history.push(`${path}/${id}`)
       })
     }
   }

@@ -70,12 +70,13 @@ function ProtectedRoute(props) {
   const { component: Component, ...rest } = props
   const user = useActiveUserState();
   const userAvailable = !isEmpty(user)
+  console.log(props)
 
   return (
     <Route {...rest}
       render={(props) => (
         userAvailable ?
-          <Component {...props} /> :
+          <Component {...props} {...rest} /> :
           <Redirect to='/users/login' />
       )}
     />
@@ -128,6 +129,7 @@ function AppWithContext() {
             <AdminRoute path='/ramblings/:id/edit' component={PostEditor} />
             <AdminRoute path='/trades/new' component={TradeEditor} />
             <ProtectedRoute path='/trades/tradeBlock/edit' component={TradeBlockEditor} />
+            <ProtectedRoute path='/chatter/edit' component={PostEditor} isChatter />
             <Route path='/users/login'>
               <Login />
             </Route>
@@ -151,6 +153,12 @@ function AppWithContext() {
             </Route>
             <Route path='/ramblings'>
               <PostsDirectory />
+            </Route>
+            <Route path='/chatter/:id'>
+              <Post />
+            </Route>
+            <Route path='/chatter'>
+              <PostsDirectory isChatter />
             </Route>
             <Route path='/trades'>
               <TradeCenter />

@@ -19,6 +19,7 @@ class ApplicationController < ActionController::API
         email: @user.email,
         role: @user.role,
         team: @user.team,
+        id: @user.to_param
       }
 
       serialized_user

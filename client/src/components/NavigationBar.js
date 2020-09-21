@@ -98,7 +98,8 @@ function NavigationBar() {
       </LogoContainer>
       <NavLinksContainer>
         <NavItem path="/" name="Home" />
-        <NavItem path="/ramblings" name="Posts" />
+        <NavItem path="/ramblings" name="My Ramblings" />
+        <NavItem path="/chatter" name="League Chatter" />
         <NavItem path="/teams" name="Teams" />
         <NavItem path="/trades" name="Trade Center" />
         <NavItem path="/drafts" name="Draft Room" />
