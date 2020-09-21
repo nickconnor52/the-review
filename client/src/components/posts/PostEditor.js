@@ -63,8 +63,9 @@ const SummaryContainer = styled.div`
   max-width: 90%
 `
 
-function PostEditor() {
+function PostEditor(props) {
   const { id } = useParams();
+  console.log(props)
   const isNew = isUndefined(id);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
@@ -75,7 +76,7 @@ function PostEditor() {
   const onDelete = () => {
     if (window.confirm('You serious Clark??')) {
       deletePost({id}).then(() => {
-        history.push(`/posts`)
+        history.push(`/ramblings`)
       })
     }
   }
@@ -83,11 +84,11 @@ function PostEditor() {
   const onSave = () => {
     if (isNew) {
       createPost({ title, content, summary }).then((post) => {
-        history.push(`/posts/${post.id}`)
+        history.push(`/ramblings/${post.id}`)
       });
     } else {
       updatePost({ title, content, summary, id}).then((post) => {
-        history.push(`/posts/${id}`)
+        history.push(`/ramblings/${id}`)
       })
     }
   }

@@ -53,7 +53,7 @@ function PostPreview(props) {
           source={summary || trimmedContent}
         />
         <PostLink>
-          <Link to={`/posts/${id}`}>see more >></Link>
+          <Link to={`/ramblings/${id}`}>see more >></Link>
         </PostLink>
       </div>
     </PostContainer>

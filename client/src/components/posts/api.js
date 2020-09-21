@@ -32,7 +32,10 @@ export const createPost = ({ content, title, summary }) => {
       title,
       content,
       summary,
-    }
+    },
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    },
   }).then(response => {
     return response.data || {};
   }).catch(response => {
@@ -44,6 +47,9 @@ export const updatePost = ({ id, content, title, summary }) => {
   return axios({
     url: `/api/posts/${id}`,
     method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    },
     data: {
       title,
       content,
@@ -60,6 +66,9 @@ export const deletePost = ({ id }) => {
   return axios({
     url: `/api/posts/${id}`,
     method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    },
   }).catch(response => {
     console.log(response);
   });

@@ -3,11 +3,13 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Redirect,
 } from 'react-router-dom';
 import styled from 'styled-components';
 import { colors, sm } from './core/style';
+import { isEmpty } from 'lodash'
 
-import { ActiveUserProvider, useActiveUserDispatch } from './context/ActiveUserContext';
+import { ActiveUserProvider, useActiveUserDispatch, useActiveUserState } from './context/ActiveUserContext';
 
 import NavigationBar from './components/NavigationBar';
 import Login from './components/users/Login'
@@ -64,6 +66,38 @@ const Break = styled.hr`
   background-image: -o-linear-gradient(left, #f0f0f0, #8c8b8b, #f0f0f0);
 `
 
+function ProtectedRoute(props) {
+  const { component: Component, ...rest } = props
+  const user = useActiveUserState();
+  const userAvailable = !isEmpty(user)
+
+  return (
+    <Route {...rest}
+      render={(props) => (
+        userAvailable ?
+          <Component {...props} /> :
+          <Redirect to='/users/login' />
+      )}
+    />
+  )
+}
+
+function AdminRoute(props) {
+  const { component: Component, ...rest } = props
+  const user = useActiveUserState();
+  const userIsAdmin = user && user.role === 'system_admin'
+
+  return (
+    <Route {...rest}
+      render={(props) => (
+        userIsAdmin ?
+          <Component {...props} /> :
+          <Redirect to='/' />
+      )}
+    />
+  )
+}
+
 function AppWithContext() {
   // Authentication Check
   const dispatch = useActiveUserDispatch();
@@ -90,6 +124,10 @@ function AppWithContext() {
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
+            <AdminRoute path='/ramblings/edit' component={PostEditor} />
+            <AdminRoute path='/ramblings/:id/edit' component={PostEditor} />
+            <AdminRoute path='/trades/new' component={TradeEditor} />
+            <ProtectedRoute path='/trades/tradeBlock/edit' component={TradeBlockEditor} />
             <Route path='/users/login'>
               <Login />
             </Route>
@@ -102,29 +140,17 @@ function AppWithContext() {
             <Route path='/teams'>
               <Teams />
             </Route>
-            <Route path='/posts/edit'>
-              <PostEditor />
-            </Route>
-            <Route path='/posts/:id/edit'>
-              <PostEditor />
-            </Route>
-            <Route path='/posts/:id'>
-              <Post />
-            </Route>
-            <Route path='/posts'>
-              <PostsDirectory />
-            </Route>
             <Route path='/transactions'>
               <Transactions />
-            </Route>
-            <Route path='/trades/tradeBlock/edit'>
-              <TradeBlockEditor />
             </Route>
             <Route path='/trades/tradeBlock'>
               <TradeBlock />
             </Route>
-            <Route path='/trades/new'>
-              <TradeEditor />
+            <Route path='/ramblings/:id'>
+              <Post />
+            </Route>
+            <Route path='/ramblings'>
+              <PostsDirectory />
             </Route>
             <Route path='/trades'>
               <TradeCenter />
