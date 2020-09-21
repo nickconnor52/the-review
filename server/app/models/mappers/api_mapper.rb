@@ -26,6 +26,7 @@ class Mappers::ApiMapper
     @error_messages
   end
 
+  # Loop through all players and assign TeamID -- will overwrite current TeamID
   def persist_active_lineups
     @response.each do |player|
       player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access)
@@ -176,11 +177,20 @@ class Mappers::PlayerMapper
   def persist_lineup
     pro_team = ProTeam.find_by(espn_id: @espn_pro_team_id)
     team = Team.find_by(espn_id: @espn_fantasy_team_id)
-    player = Player.find_or_initialize_by(espn_id: @espn_player_id)
+    player = Player.find_by(espn_id: @espn_player_id)
+
+    if player.nil?
+      persist()
+      return true
+    end
+
     player.espn_fantasy_team_id = @espn_fantasy_team_id
     player.team_id = team.to_param
     player.espn_pro_team_id = @espn_pro_team_id
     player.pro_team = pro_team
+    if @espn_fantasy_team_id === 0
+      player.on_trade_block = false
+    end
 
     player.save
   end

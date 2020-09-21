@@ -9,9 +9,19 @@ class ApplicationController < ActionController::API
 
   def session_user
     decoded_hash = decoded_token
-    if !decoded_hash.empty?
+    if !decoded_hash.nil? && !decoded_hash.empty?
       user_id = decoded_hash[0]['user_id']
       @user = User.find(user_id)
+      serialized_user = {
+        first_name: @user.first_name,
+        last_name: @user.last_name,
+        username: @user.username,
+        email: @user.email,
+        role: @user.role,
+        team: @user.team,
+      }
+
+      serialized_user
     else
       nil
     end

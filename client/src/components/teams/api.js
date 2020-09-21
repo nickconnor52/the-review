@@ -47,3 +47,21 @@ export const getRoster = (id, year) => {
     return {};
   });
 }
+
+export const updateTradeBlock = ({ teamId, selectedPlayerIds }) => {
+  return axios({
+    url: `/api/teams/${teamId}/trade_block`,
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem('token')}`
+    },
+    data: {
+      player_ids: selectedPlayerIds,
+    }
+  }).then(response => {
+    return response.data || {};
+  }).catch(response => {
+    console.log(response);
+    return {};
+  });
+}

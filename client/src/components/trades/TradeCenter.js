@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components';
-import {  get, sortBy } from 'lodash';
+import styled, { css } from 'styled-components';
+import { get, sortBy } from 'lodash';
 import { getAllTrades } from './api';
 import moment from 'moment';
 import { sm } from '../../core/style';
+import { useHistory } from 'react-router-dom';
 
 const PageContainer = styled.div`
   margin-top: 2em;
@@ -26,7 +27,6 @@ const TeamHeader = styled.div`
   font-size: 2em;
   font-weight: 600;
   text-align: center;
-  margin-bottom: 2rem;
 `
 
 const Subtitle = styled.div`
@@ -94,7 +94,46 @@ const PickPlayer = styled.div`
   text-align: center;
 `
 
+const HeaderContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: -2em;
 
+  @media(max-width: ${sm}) {
+    margin-bottom: 1em;
+  }
+`
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  top: -3em;
+
+  @media(max-width: ${sm}) {
+    top: 0;
+    justify-content: center;
+  }
+`
+
+const Button = styled.a`
+  text-align: center;
+  display: inline-block;
+  border-radius: 3px;
+  padding: 0.5rem 0;
+  margin: 0.5rem 1rem;
+  width: 7em;
+  background: transparent;
+  color: #444444;
+  border: 2px solid #444444;
+  cursor: pointer;
+
+  ${props => props.primary && css`
+    background: #444444;
+    color: white;
+  `}
+`
 
 function TransactionPieceDisplay(props) {
   const { display_name: displayName, player_id: playerId, id, draft_pick: draftPick, draft_year: draftYear } = props;
@@ -168,17 +207,31 @@ function TradeView(props) {
 
 function TradeCenter() {
   const [trades, setTrades] = useState([]);
+  const history = useHistory();
   useEffect(() => {
     getAllTrades().then(response => {
       setTrades(sortBy(response, 'accepted_date').reverse());
     })
   }, [])
 
+  const handleTradeBlock = () => {
+    history.push('/trades/tradeBlock')
+  }
 
   return (
     <PageContainer>
       <BodyContainer>
-        <TeamHeader>Trade Center</TeamHeader>
+        <HeaderContainer>
+          <TeamHeader>Trade Center</TeamHeader>
+          <ButtonContainer>
+            <Button
+              primary
+              onClick={handleTradeBlock}
+            >
+              Trade Block
+            </Button>
+          </ButtonContainer>
+        </HeaderContainer>
         {
           trades.map(trade => (
             <TradeView key={trade.id} {...trade} />

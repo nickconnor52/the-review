@@ -1,10 +1,23 @@
 class TeamsController < ApplicationController
-  before_action :get_team, only: [:show, :update, :team_transactions, :roster]
+  before_action :get_team, only: [:show, :update, :team_transactions, :roster, :trade_block]
+  before_action :require_login, only: [:update, :trade_block]
 
   def index
     teams = Team.all.order created_at: :desc
 
-    render :json => teams, :include => [:team_info, :current_owner]
+    render :json => teams, :include => [
+      :team_info,
+      :current_owner,
+      {
+        :trade_block => {
+          :include => [
+            :position,
+            :pro_team
+          ]
+        }
+
+      }
+    ]
   end
 
   def show
@@ -58,6 +71,20 @@ class TeamsController < ApplicationController
       :pro_team,
       :position
     ]
+  end
+
+  def trade_block
+    roster = @team.roster
+    player_ids = params[:player_ids].map(&:to_s)
+    roster.each do |player|
+      to_trade_block = player_ids.include? player.to_param
+      player.on_trade_block = to_trade_block
+      player.save
+    end
+    @team.trade_block_updated_at = DateTime.now
+    @team.save
+
+    render :json => roster
   end
 
 

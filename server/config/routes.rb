@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       member do
         get 'transactions', to: 'teams#team_transactions'
         get 'roster/:year', to: 'teams#roster'
+        post 'trade_block', to: 'teams#trade_block'
       end
     end
 

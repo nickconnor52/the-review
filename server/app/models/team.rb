@@ -3,6 +3,7 @@ class Team < ActiveRecord::Base
   has_many :owners
   has_many :transaction_pieces
   has_many :players
+  belongs_to :user
   has_and_belongs_to_many :player_transactions, class_name: 'Transaction'
 
   def current_owner
@@ -18,7 +19,7 @@ class Team < ActiveRecord::Base
   end
 
   def roster
-    Player.where(team_id: self.id).all
+    Player.where(team_id: self.id).order(:espn_position_id => :asc).all
   end
 
   def team_info
@@ -30,6 +31,10 @@ class Team < ActiveRecord::Base
       .where(team_id: self.id)
       .order(created_at: :desc)
       .all[1..-1]
+  end
+
+  def trade_block
+    roster.where(on_trade_block: true)
   end
 
   def trade_count

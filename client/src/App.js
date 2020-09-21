@@ -16,6 +16,8 @@ import Teams from './components/teams/Teams';
 import Team from './components/teams/Team';
 import Transactions from './components/transactions/Transactions';
 import TradeCenter from './components/trades/TradeCenter';
+import TradeBlock from './components/trades/TradeBlock';
+import TradeBlockEditor from './components/trades/TradeBlockEditor';
 import TradeEditor from './components/trades/TradeEditor';
 import DraftRoom from './components/drafts/DraftRoom';
 import PostsDirectory from './components/posts/PostsDirectory';
@@ -114,6 +116,12 @@ function AppWithContext() {
             </Route>
             <Route path='/transactions'>
               <Transactions />
+            </Route>
+            <Route path='/trades/tradeBlock/edit'>
+              <TradeBlockEditor />
+            </Route>
+            <Route path='/trades/tradeBlock'>
+              <TradeBlock />
             </Route>
             <Route path='/trades/new'>
               <TradeEditor />
