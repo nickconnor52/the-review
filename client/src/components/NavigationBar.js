@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 import { colors, sm } from '../core/style';
 import { isEmpty } from 'lodash'
-import { useActiveUserState, useActiveUserDispatch } from '../context/ActiveUserContext'
+import { useActiveUserState } from '../context/ActiveUserContext'
 
 const NavigationContainer = styled.div`
   display: flex;
@@ -62,7 +62,7 @@ const LoginButton = styled.div`
   }
 `
 
-const LogoutButton = styled.div`
+const UserButton = styled.div`
   cursor: pointer;
   color: ${colors.lightGrey};
 `
@@ -83,12 +83,9 @@ function NavItem(props) {
 function NavigationBar() {
   const history = useHistory();
   const activeUser = useActiveUserState();
-  const dispatch = useActiveUserDispatch();
 
-  const onLogout = () => {
-    localStorage.setItem('token', null)
-    localStorage.setItem('activeUser', null)
-    dispatch({type: 'REMOVE_ACTIVE_USER' })
+  const onUserClick = () => {
+    history.push('/users/profile')
   }
 
   return (
@@ -108,9 +105,9 @@ function NavigationBar() {
         {
           !isEmpty(activeUser) ?
             (
-              <LogoutButton onClick={onLogout}>
-                Logout
-              </LogoutButton>
+              <UserButton onClick={onUserClick}>
+                {activeUser.username}
+              </UserButton>
             ) :
             (
               <LoginButton>

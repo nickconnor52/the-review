@@ -22,6 +22,7 @@ import TradeBlock from './components/trades/TradeBlock';
 import TradeBlockEditor from './components/trades/TradeBlockEditor';
 import TradeEditor from './components/trades/TradeEditor';
 import DraftRoom from './components/drafts/DraftRoom';
+import UserProfile from './components/users/UserProfile';
 import PostsDirectory from './components/posts/PostsDirectory';
 import Post from './components/posts/Post';
 import PostEditor from './components/posts/PostEditor';
@@ -128,6 +129,7 @@ function AppWithContext() {
             <AdminRoute path='/ramblings/:id/edit' component={PostEditor} />
             <AdminRoute path='/trades/new' component={TradeEditor} />
             <ProtectedRoute path='/trades/tradeBlock/edit' component={TradeBlockEditor} />
+            <ProtectedRoute path='/users/profile' component={UserProfile} />
             <ProtectedRoute path='/chatter/edit' component={PostEditor} isChatter />
             <Route path='/users/login'>
               <Login />

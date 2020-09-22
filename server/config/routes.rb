@@ -1,7 +1,11 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   scope path: 'api' do
-    resource :users, only: [:create]
+    resource :users, only: [:create] do
+      collection do
+        post '/update', to: 'users#update'
+      end
+    end
 
     # Authentication Routes
     post "/login", to: "auth#login"
