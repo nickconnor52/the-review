@@ -19,7 +19,7 @@ const NavLinksContainer = styled.div`
   flex-grow: 2;
   padding-right: 1em;
   padding-left: 1em;
-  overflow: scroll;
+  overflow: auto;
 `
 
 const LogoContainer = styled.div`

@@ -106,7 +106,7 @@ function AppWithContext() {
     const token = localStorage.getItem('token')
     if (token) {
       autoLogin(token).then(response => {
-        if (!response.errors) {
+        if (response && !response.errors) {
           localStorage.setItem('activeUser', JSON.stringify(response))
           dispatch({type: 'SET_ACTIVE_USER', user: response, token })
         } else {
