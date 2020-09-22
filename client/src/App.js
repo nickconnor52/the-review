@@ -70,7 +70,6 @@ function ProtectedRoute(props) {
   const { component: Component, ...rest } = props
   const user = useActiveUserState();
   const userAvailable = !isEmpty(user)
-  console.log(props)
 
   return (
     <Route {...rest}

@@ -144,6 +144,11 @@ const Team = styled.div`
   text-align: center;
 `
 
+const PositionContainer = styled.div`
+  margin-top: 0.5em;
+  display: flex;
+`
+
 function TransactionPieceDisplay(props) {
   const { full_name: fullName, id, position, pro_team: proTeam } = props;
   const { abbreviation } = position;
@@ -164,7 +169,7 @@ function TransactionPieceDisplay(props) {
 }
 
 function TeamView(props) {
-  const { team_info: teamInfo, trade_block_updated_at: updatedDate, trade_block: tradeBlock } = props;
+  const { team_info: teamInfo, trade_block_updated_at: updatedDate, trade_block: tradeBlock, position_need: positionNeed } = props;
   const { location, nickname } = teamInfo;
 
   return (
@@ -182,6 +187,14 @@ function TeamView(props) {
           }
         </TeamColumn>
       </TeamsContainer>
+      <PositionContainer>
+        <div style={{fontWeight: 'bold', marginRight: '1em'}}>
+          Team Need:
+        </div>
+        <div>
+          {positionNeed ? positionNeed.name : 'No Preference'}
+        </div>
+      </PositionContainer>
     </TradeCard>
   )
 }

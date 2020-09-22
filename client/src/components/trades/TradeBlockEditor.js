@@ -5,7 +5,7 @@ import { get, isEmpty } from 'lodash'
 import { useActiveUserState } from '../../context/ActiveUserContext'
 import DataTable from '../../core/DataTable'
 
-import { getTeam, updateTradeBlock } from '../teams/api';
+import { getTeam, updateTradeBlock, getPositionInfo } from '../teams/api';
 
 const EditContainer = styled.div`
   margin-top: 2em;
@@ -66,7 +66,14 @@ const TableContainer = styled.div`
   margin-top: 2em;
   width: 90%;
   height: 400px;
+  margin-bottom: 2em;
 `
+
+const PositionDropdown = styled.div`
+  display: flex;
+  margin-bottom: 1em;
+`
+
 
 function TradeBlockEditor() {
   const history = useHistory();
@@ -74,13 +81,23 @@ function TradeBlockEditor() {
   const teamId = get(activeUser, ['team', 'id'], '');
   const [gridApi, setGridApi] = useState({});
   const [roster, setRoster] = useState([]);
+  const [positions, setPositions] = useState([]);
+  const [positionId, setPositionId] = useState('');
   const [selectedPlayerIds, setSelectedPlayerIds] = useState(roster.filter(p => p.on_trade_block));
+
+  useEffect(() => {
+    getPositionInfo().then(response => {
+      setPositions(response)
+    })
+  }, [])
 
   useEffect(() => {
     if (teamId && !isEmpty(gridApi)) {
       getTeam(teamId).then(response => {
         const playerIds = response.roster.filter(p => p.on_trade_block).map(p => p.id);
         setSelectedPlayerIds(playerIds)
+        const position = get(response, ['trade_block_position_id'], '0')
+        setPositionId(position)
         setRoster(response.roster);
         gridApi.forEachNode((node) => {
           if (playerIds.includes(node.data.id)) {
@@ -92,7 +109,7 @@ function TradeBlockEditor() {
   }, [teamId, gridApi]);
 
   const onSave = () => {
-    updateTradeBlock({ teamId, selectedPlayerIds }).then((response) => {
+    updateTradeBlock({ teamId, selectedPlayerIds, positionId }).then((response) => {
       history.push(`/trades/tradeBlock`)
     });
   }
@@ -137,6 +154,19 @@ function TradeBlockEditor() {
               onGridReady={onGridReady}
             />
           </TableContainer>
+          <div style={{marginBottom: '1em', fontWeight: 'bold'}}>
+            Pressing Need
+          </div>
+          <PositionDropdown>
+            <select onChange={(e) => setPositionId(e.target.value)} value={positionId} id="positionPicker">
+            {
+              positions.map((position) => (
+                <option key={position.id} value={position.id}>{position.name}</option>
+              ))
+            }
+              <option key={'0'} value={'0'}>-- Need It All --</option>
+            </select>
+          </PositionDropdown>
         </TradeContainer>
       </InputContainer>
       <ButtonContainer>

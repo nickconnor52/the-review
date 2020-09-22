@@ -18,6 +18,10 @@ class Team < ActiveRecord::Base
       .where.not(last_active_season: [nil, ''])
   end
 
+  def position_need
+    Position.where(id: trade_block_position_id).first
+  end
+
   def roster
     Player.where(team_id: self.id).order(:espn_position_id => :asc).all
   end

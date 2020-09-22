@@ -24,6 +24,18 @@ export const getTeam = (id) => {
   });
 }
 
+export const getPositionInfo = () => {
+  return axios({
+    url: `/api/positions`,
+    method: 'GET',
+  }).then(response => {
+    return response.data || {};
+  }).catch(response => {
+    console.log(response);
+    return {};
+  });
+}
+
 export const getTeamTransactions = (id) => {
   return axios({
     url: `/api/teams/${id}/transactions`,
@@ -48,7 +60,7 @@ export const getRoster = (id, year) => {
   });
 }
 
-export const updateTradeBlock = ({ teamId, selectedPlayerIds }) => {
+export const updateTradeBlock = ({ teamId, selectedPlayerIds, positionId }) => {
   return axios({
     url: `/api/teams/${teamId}/trade_block`,
     method: 'POST',
@@ -56,6 +68,7 @@ export const updateTradeBlock = ({ teamId, selectedPlayerIds }) => {
       Authorization: `Bearer ${localStorage.getItem('token')}`
     },
     data: {
+      position_id: positionId,
       player_ids: selectedPlayerIds,
     }
   }).then(response => {

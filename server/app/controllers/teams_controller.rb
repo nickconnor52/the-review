@@ -8,6 +8,7 @@ class TeamsController < ApplicationController
     render :json => teams, :include => [
       :team_info,
       :current_owner,
+      :position_need,
       {
         :trade_block => {
           :include => [
@@ -81,6 +82,7 @@ class TeamsController < ApplicationController
       player.on_trade_block = to_trade_block
       player.save
     end
+    @team.trade_block_position_id = params[:position_id]
     @team.trade_block_updated_at = DateTime.now
     @team.save
 

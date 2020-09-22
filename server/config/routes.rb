@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :positions
     resources :trades
     resources :transactions
     resources :drafts, param: :year
