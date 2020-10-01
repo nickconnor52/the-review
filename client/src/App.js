@@ -292,8 +292,9 @@ function Home() {
         Welcome to The League Review
       </Title>
       <Body>
-        It's gonna look pretty bare in here for a while, but I'm working on it. At a bare minimum, check back each week to read
-        my latest ramblings about your team, my team, and everything in between. I'll keep y'all posted as things move along.
+        If you haven't yet, go sign up for an account in the top right. If you have already done that, go
+        update your trade block and check the rest of the league's offers. If you've already done that, go chirp
+        in the chatter section. And if you don't feel up to the task there, go back to Twitter.
         <RankingsContainer>
           <TableContainer className="markdown-body">
             <Title>Season Power Rankings</Title>
