@@ -113,9 +113,12 @@ function PostEditor(props) {
         <TitleInput value={title} onChange={(e) => setTitle(e.target.value)}/>
       </div>
       <SummaryContainer>
-        <Label>Summary:</Label>
+        <Label>Summary (optional):</Label>
         <textarea value={summary} onChange={(e) => setSummary(e.target.value)} rows="4" cols="50" />
       </SummaryContainer>
+      <div style={{marginBottom: '1em'}}>
+        <Label style={{fontSize: '24px'}}>Post Body</Label>
+      </div>
       <div className="container" style={inlineStyle}>
         <ReactMde
           value={content}

@@ -6,13 +6,13 @@ class PostsController < ApplicationController
   def chatter
     posts = Post.where(post_type: 'chatter').order created_at: :desc
 
-    render :json => posts, :include => [:user]
+    render :json => posts, :include => [:user], :methods => [:comment_count]
   end
 
   def ramblings
     posts = Post.where(post_type: 'rambling').order created_at: :desc
 
-    render :json => posts, :include => [:user]
+    render :json => posts, :include => [:user], :methods => [:comment_count]
   end
 
   def show

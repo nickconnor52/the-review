@@ -105,7 +105,7 @@ const Author = styled.div`
   font-size: 0.8em;
   margin-right: 1em;
 `
-const Date = styled.div`
+const LightFont = styled.div`
   color: ${colors.midGrey};
   font-weight: 300;
   font-size: 0.8em;
@@ -124,7 +124,7 @@ const PreviewContainer = styled.div`
 `
 
 function PostPreview(props) {
-  const { content, title, summary, id, user, isChatter, created_at: createdAt } = props;
+  const { content, title, summary, id, user, isChatter, comment_count: commentCount, created_at: createdAt } = props;
   const trimmedContent = content.length > 250 ? `${content.substring(0, 250)}...` : content;
   const username = user.username || 'Ghost Writer'
   const createdDate = moment(createdAt).format('MMMM Do, YYYY')
@@ -138,16 +138,18 @@ function PostPreview(props) {
           (
             <InfoContainer>
               <Author>{username}:</Author>
-              <Date>{createdDate}</Date>
+              <LightFont>{createdDate}</LightFont>
+
             </InfoContainer>
           ) :
           (
             <InfoContainer>
-              <Date>{createdDate}</Date>
+              <LightFont>{createdDate}</LightFont>
             </InfoContainer>
           )
       }
       <PreviewContainer>
+        <LightFont>{commentCount} chirps</LightFont>
         <Markdown
           source={summary || trimmedContent}
         />
