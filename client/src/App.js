@@ -265,18 +265,18 @@ const dynastyRanking = `
 `
 
 const playoffChances = `
-| ** Team ** | ** Odds ** |
+| ** Team ** | ** Odds ** | ** Champion ** |
 | ---------- | ----------------- |
-| ** Mark ** | 99% |
-| ** Nick ** | 89% |
-| ** Josiah ** | 83% |
-| ** Daniel ** | 39% |
-| ** Gary ** | 38% |
-| ** Josias ** | 30% |
-| ** Matt ** | 20% |
-| ** Derek ** | 2% |
-| ** Luke ** | < 1% |
-| ** Spencer ** | 0% |
+| ** Mark ** | 91% | 34% |
+| ** Josiah ** | 79% | 17% |
+| ** Josias ** | 55% | 9% |
+| ** Daniel ** | 50% | 11% |
+| ** Nick ** | 48% | 15% |
+| ** Gary ** | 38% | 7% |
+| ** Matt ** | 35% | 6% |
+| ** Derek ** | 4% | < 1% |
+| ** Luke ** | < 1% | < 1% |
+| ** Spencer ** | < 1% | < 1% |
 `
 
 const SubTitle = styled.div`
@@ -285,7 +285,7 @@ font-size: 0.8em;
 `
 
 function Home() {
-  const updated = '10/7/20'
+  const updated = '10/14/20'
   return (
     <HomeContainer>
       <Title>
