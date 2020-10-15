@@ -32,6 +32,10 @@ Rails.application.routes.draw do
     resources :transactions
     resources :drafts, param: :year
 
+    scope :scores do
+      get 'best_ball' => 'scores#calculate_best_ball'
+    end
+
     namespace :scrape do
       get 'sync_players_by_year' => 'espn#sync_players_by_year'
       get 'sync_active_lineups' => 'espn#sync_active_lineups'
