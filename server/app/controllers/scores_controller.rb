@@ -8,6 +8,7 @@ class ScoresController < ApplicationController
     position_hash['te'] = Position.select(:id).find_by_name('Tight End').to_param
     position_hash['flex'] = [position_hash['rb'], position_hash['wr'], position_hash['te']]
     team_scores = Hash.new(0)
+    actual_scores = Hash.new(0)
     games.each do |game|
       # TODO: CACHE GAME BEST BALL SCORE IN DB -- QUERY FIRST PRIOR TO DOING THE REST OF THIS CALCULATION
       team_ids = [game.home_team_id, game.away_team_id]
@@ -17,11 +18,14 @@ class ScoresController < ApplicationController
 
       home_team_owner = game.home_team.current_owner.first_name
       away_team_owner = game.away_team.current_owner.first_name
+
       team_scores[home_team_owner] = (team_scores[home_team_owner] + calculate_team_best_ball(home_team_players, position_hash)).round(2)
       team_scores[away_team_owner] = (team_scores[away_team_owner] + calculate_team_best_ball(away_team_players, position_hash)).round(2)
+      actual_scores[home_team_owner] = (actual_scores[home_team_owner] + game.home_score.to_f).round(2)
+      actual_scores[away_team_owner] = (actual_scores[away_team_owner] + game.away_score.to_f).round(2)
     end
 
-    render :json => { best_ball_score: team_scores, season: 2020 }
+    render :json => { best_ball_score: team_scores, actual_total_score: actual_scores, season: 2020 }
   end
 
   private

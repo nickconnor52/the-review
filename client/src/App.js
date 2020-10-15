@@ -286,9 +286,9 @@ font-size: 0.8em;
 `
 
 const bestBallScore = (scores) => {
-  const header = `| ** Owner ** | ** Cumulative Score ** |\n| ---------- | ----------------- |`
+  const header = `| ** Owner ** | ** Best Ball Score ** | ** Benched Points **\n| ---------- | ----------------- |`
   const rows = reduce(scores, (output, row) => {
-    return output + `\n| ${row.name} | ${row.score} |`
+    return output + `\n| ${row.name} | ${row.score} | ${row.difference} |`
   }, ``);
 
   return header + rows
@@ -299,10 +299,14 @@ function Home() {
   useEffect(() => {
     getBestBallScores().then(response => {
       const scoresObject = response.best_ball_score
-      const rawScores = map(scoresObject, (score, name) => ({
-        name,
-        score,
-      }));
+      const rawScores = map(scoresObject, (score, name) => {
+        const difference = (score - response.actual_total_score[name]).toFixed(2);
+        return {
+          name,
+          score,
+          difference,
+        }
+      });
 
       const sortedScores = sortBy(rawScores, ['score'])
 
