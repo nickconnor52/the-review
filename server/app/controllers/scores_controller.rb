@@ -33,11 +33,11 @@ class ScoresController < ApplicationController
   def calculate_team_best_ball(player_stats, position_hash)
     remaining_players = player_stats
 
-    qb_score = get_position_score(remaining_players, [position_hash['qb']], 1)
-    rb_score = get_position_score(remaining_players, [position_hash['rb']], 2)
-    wr_score = get_position_score(remaining_players, [position_hash['wr']], 2)
-    te_score = get_position_score(remaining_players, [position_hash['te']], 1)
-    flex_score = get_position_score(remaining_players, position_hash['flex'], 2)
+    qb_score, remaining_players = get_position_score(remaining_players, [position_hash['qb']], 1)
+    rb_score, remaining_players = get_position_score(remaining_players, [position_hash['rb']], 2)
+    wr_score, remaining_players = get_position_score(remaining_players, [position_hash['wr']], 2)
+    te_score, remaining_players = get_position_score(remaining_players, [position_hash['te']], 1)
+    flex_score, remaining_players = get_position_score(remaining_players, position_hash['flex'], 2)
 
     return [qb_score, rb_score, wr_score, flex_score].reduce(:+)
   end
@@ -51,6 +51,6 @@ class ScoresController < ApplicationController
     removable_player_ids = player_scores.map(&:player_id)
     remaining_players = remaining_players.reject {|p| removable_player_ids.include?(p.player_id)}
 
-    return player_scores.reduce(0) { |sum, p| sum + p.actual_total.to_f }
+    return player_scores.reduce(0) { |sum, p| sum + p.actual_total.to_f }, remaining_players
   end
 end
