@@ -163,7 +163,9 @@ function Comment(props) {
         </CommentDate>
       </CommentInfoContainer>
       <BodyContainer>
-        {body}
+        <Markdown
+          source={body}
+        />
       </BodyContainer>
     </CommentContainer>
   );
