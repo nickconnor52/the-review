@@ -135,6 +135,10 @@ const Button = styled.a`
   `}
 `
 
+const NoteContainer = styled.div`
+  font-size: 12px;
+`
+
 function TransactionPieceDisplay(props) {
   const { display_name: displayName, player_id: playerId, id, draft_pick: draftPick, draft_year: draftYear } = props;
   const roundNumber = () => {
@@ -170,7 +174,7 @@ function TransactionPieceDisplay(props) {
 }
 
 function TradeView(props) {
-  const { accepted_date: acceptedDate, teams, transaction_pieces: transactionPieces } = props;
+  const { accepted_date: acceptedDate, teams, transaction_pieces: transactionPieces, note } = props;
   const teamA = get(teams, [0, 'team_info'], {});
   const teamB = get(teams, [1, 'team_info'], {});
   const teamAPieces = transactionPieces.filter(t => (t.to_team_id === teamA.team_id));
@@ -201,6 +205,18 @@ function TradeView(props) {
           }
         </TeamColumn>
       </TeamsContainer>
+      {
+        !!note ?
+          (
+            <NoteContainer>
+              <b>Note:</b> {note}
+            </NoteContainer>
+
+          ) :
+          (
+            null
+          )
+      }
     </TradeCard>
   )
 }
