@@ -9,6 +9,7 @@ class ScoresController < ApplicationController
     position_hash['flex'] = [position_hash['rb'], position_hash['wr'], position_hash['te']]
     team_scores = Hash.new(0)
     games.each do |game|
+      # TODO: CACHE GAME BEST BALL SCORE IN DB -- QUERY FIRST PRIOR TO DOING THE REST OF THIS CALCULATION
       team_ids = [game.home_team_id, game.away_team_id]
       player_stats = PlayerStat.where(week: game.week, season: game.season, team_id: team_ids)
       home_team_players = player_stats.select {|p| p.team_id === game.home_team_id }

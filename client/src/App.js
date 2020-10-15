@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -6,8 +6,9 @@ import {
   Redirect,
 } from 'react-router-dom';
 import styled from 'styled-components';
+import { getBestBallScores } from './components/scores/api'
 import { colors, sm } from './core/style';
-import { isEmpty } from 'lodash'
+import { isEmpty, map, sortBy, reduce } from 'lodash'
 
 import { ActiveUserProvider, useActiveUserDispatch, useActiveUserState } from './context/ActiveUserContext';
 
@@ -284,7 +285,32 @@ font-style: italic;
 font-size: 0.8em;
 `
 
+const bestBallScore = (scores) => {
+  const header = `| ** Owner ** | ** Cumulative Score ** |\n| ---------- | ----------------- |`
+  const rows = reduce(scores, (output, row) => {
+    return output + `\n| ${row.name} | ${row.score} |`
+  }, ``);
+
+  console.log(rows)
+  return header + rows
+}
+
 function Home() {
+  const [scores, setScores] = useState([]);
+  useEffect(() => {
+    getBestBallScores().then(response => {
+      const scoresObject = response.best_ball_score
+      const rawScores = map(scoresObject, (score, name) => ({
+        name,
+        score,
+      }));
+
+      const sortedScores = sortBy(rawScores, ['score'])
+
+      setScores(sortedScores)
+    });
+  }, []);
+
   const updated = '10/14/20'
   return (
     <HomeContainer>
@@ -313,6 +339,19 @@ function Home() {
             <SubTitle>Updated: {updated}</SubTitle>
             <Markdown source={playoffChances} />
           </TableContainer>
+          {
+            scores.length > 0 ?
+            (
+              <TableContainer className="markdown-body">
+                <Title>Best Ball Score</Title>
+                <SubTitle>Updated: {updated}</SubTitle>
+                <Markdown source={bestBallScore(scores)} />
+              </TableContainer>
+              ) :
+              (
+                null
+              )
+          }
         </RankingsContainer>
       </Body>
     </HomeContainer>
