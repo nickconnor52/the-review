@@ -137,6 +137,12 @@ const Button = styled.a`
 
 const NoteContainer = styled.div`
   font-size: 12px;
+  text-align: center;
+  padding: 0.5em 5em;
+
+  @media(max-width: ${sm}) {
+    padding: 0.5em 0;
+  }
 `
 
 function TransactionPieceDisplay(props) {
