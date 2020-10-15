@@ -150,9 +150,9 @@ const PositionContainer = styled.div`
 `
 
 function TransactionPieceDisplay(props) {
-  const { full_name: fullName, id, position, pro_team: proTeam } = props;
+  const { full_name: fullName, id, position, pro_team: proTeam = {} } = props;
   const { abbreviation } = position;
-  const { name } = proTeam;
+  const { name = "Free Agent" } = proTeam;
   return  (
       <PlayerView key={id}>
         <Name>
