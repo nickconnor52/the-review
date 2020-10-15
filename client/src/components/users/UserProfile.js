@@ -74,17 +74,25 @@ function UserProfile() {
   const [username, setUsername] = useState(activeUser.username);
   const [firstName, setFirstName] = useState(activeUser.first_name);
   const [lastName, setLastName] = useState(activeUser.last_name);
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
   const dispatch = useActiveUserDispatch();
   const history = useHistory();
 
   const onSave = () => {
-    updateUser({id: activeUser.id, email, username, firstName, lastName}).then(response => {
+    if (!password || password === passwordConfirm) {
+      updateUser({id: activeUser.id, email, username, firstName, lastName, password}).then(response => {
       if (!response.errors) {
-        dispatch({ type: 'SET_ACTIVE_USER', user: response})
-        localStorage.setItem('activeUser', JSON.stringify(response))
-        history.push('/')
-      }
-    })
+          dispatch({ type: 'SET_ACTIVE_USER', user: response})
+          localStorage.setItem('activeUser', JSON.stringify(response))
+          history.push('/')
+        }
+      })
+    } else {
+      window.alert("Passwords must match")
+      setPassword("")
+      setPasswordConfirm("")
+    }
   }
 
   const onLogout = () => {
@@ -138,6 +146,26 @@ function UserProfile() {
             name='lastName'
             placeholder='Enter Last Name'
             onChange={(e) => setLastName(e.target.value)}
+          />
+        </InputRow>
+        <InputRow>
+          <InputLabel>Update Password:</InputLabel>
+          <InputElement
+            type='password'
+            value={password}
+            name='password'
+            placeholder='Optionally Update Password'
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </InputRow>
+        <InputRow>
+          <InputLabel>Confirm Password:</InputLabel>
+          <InputElement
+            type='password'
+            value={passwordConfirm}
+            name='passwordConfirm'
+            placeholder='Confirm Password'
+            onChange={(e) => setPasswordConfirm(e.target.value)}
           />
         </InputRow>
         <ButtonContainer>

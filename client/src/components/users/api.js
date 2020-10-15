@@ -18,7 +18,7 @@ export const createUser = ({ email, username, firstName, lastName, password }) =
   });
 }
 
-export const updateUser = ({ id, email, username, firstName, lastName }) => {
+export const updateUser = ({ id, email, username, firstName, lastName, password }) => {
   return axios({
     url: '/api/users/update',
     method: 'POST',
@@ -31,6 +31,7 @@ export const updateUser = ({ id, email, username, firstName, lastName }) => {
       username,
       first_name: firstName,
       last_name: lastName,
+      password,
     }
   }).then(response => {
     return response.data || {};

@@ -7,7 +7,14 @@ class UsersController < ApplicationController
     if user.save
       payload = { user_id: user.to_param }
       token = encode_token(payload)
-      render :json => { user: user, jwt: token }
+      serialized_user = {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      }
+      render :json => { user: serialized_user, jwt: token }
     else
       render :json => { errors: user.errors.full_messages }, status: :not_acceptable
     end
@@ -19,9 +26,21 @@ class UsersController < ApplicationController
     @user.last_name = params[:last_name]
     @user.email = params[:email]
 
+    if params[:password].present?
+      @user.password = params[:password]
+    end
+
     @user.save!
 
-    render :json => @user
+    serialized_user = {
+      first_name: @user.first_name,
+      last_name: @user.last_name,
+      username: @user.username,
+      email: @user.email,
+      role: @user.role,
+    }
+
+    render :json => serialized_user
   end
 
   private

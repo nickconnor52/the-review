@@ -291,7 +291,6 @@ const bestBallScore = (scores) => {
     return output + `\n| ${row.name} | ${row.score} |`
   }, ``);
 
-  console.log(rows)
   return header + rows
 }
 
