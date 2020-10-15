@@ -241,40 +241,40 @@ const draftRanking = `
 | ** Mark ** | 100 |
 | ** Nick ** | 94 |
 | ** Daniel ** | 86 |
-| ** Josiah ** | 83 |
+| ** Josiah ** | 79 |
 | ** Matt ** | 75 |
-| ** Josias ** | 70 |
-| ** Gary ** | 69 |
-| ** Derek ** | 68 |
-| ** Luke ** | 64 |
-| ** Spencer ** | 41 |
+| ** Gary ** | 67 |
+| ** Josias ** | 66 |
+| ** Derek ** | 62 |
+| ** Luke ** | 61 |
+| ** Spencer ** | 46 |
 `
 
 const dynastyRanking = `
 | ** Team ** | ** Power Index ** |
 | ---------- | ----------------- |
 | ** Nick ** | 100 |
-| ** Mark ** | 89 |
-| ** Matt ** | 82 |
-| ** Josiah ** | 81 |
-| ** Luke ** | 76 |
-| ** Daniel ** | 75 |
-| ** Gary ** | 73 |
-| ** Josias ** | 70 |
-| ** Derek ** | 68 |
-| ** Spencer ** | 48 |
+| ** Mark ** | 86 |
+| ** Matt ** | 79 |
+| ** Josiah ** | 76 |
+| ** Daniel ** | 72 |
+| ** Josias ** | 69 |
+| ** Luke ** | 69 |
+| ** Gary ** | 68 |
+| ** Derek ** | 64 |
+| ** Spencer ** | 47 |
 `
 
 const playoffChances = `
 | ** Team ** | ** Odds ** | ** Champion ** |
 | ---------- | ----------------- |
-| ** Mark ** | 91% | 34% |
+| ** Mark ** | 91% | 33% |
 | ** Josiah ** | 79% | 17% |
-| ** Josias ** | 55% | 9% |
-| ** Daniel ** | 50% | 11% |
-| ** Nick ** | 48% | 15% |
-| ** Gary ** | 38% | 7% |
-| ** Matt ** | 35% | 6% |
+| ** Nick ** | 52% | 17% |
+| ** Josias ** | 51% | 8% |
+| ** Daniel ** | 48% | 11% |
+| ** Gary ** | 38% | 8% |
+| ** Matt ** | 36% | 6% |
 | ** Derek ** | 4% | < 1% |
 | ** Luke ** | < 1% | < 1% |
 | ** Spencer ** | < 1% | < 1% |
