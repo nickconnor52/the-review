@@ -6,6 +6,6 @@ class Comment < ActiveRecord::Base
   end
 
   def author
-    User.find(user_id)
+    User.find(user_id) unless user_id.nil?
   end
 end

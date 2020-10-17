@@ -13,6 +13,8 @@ class UsersController < ApplicationController
         username: user.username,
         email: user.email,
         role: user.role,
+        id: user.to_param,
+        team: user.team
       }
       render :json => { user: serialized_user, jwt: token }
     else
@@ -38,6 +40,8 @@ class UsersController < ApplicationController
       username: @user.username,
       email: @user.email,
       role: @user.role,
+      id: @user.to_param,
+      team: @user.team
     }
 
     render :json => serialized_user
