@@ -10,17 +10,34 @@ class ScoresController < ApplicationController
     team_scores = Hash.new(0)
     actual_scores = Hash.new(0)
     games.each do |game|
-      # TODO: CACHE GAME BEST BALL SCORE IN DB -- QUERY FIRST PRIOR TO DOING THE REST OF THIS CALCULATION
       team_ids = [game.home_team_id, game.away_team_id]
-      player_stats = PlayerStat.where(week: game.week, season: game.season, team_id: team_ids)
-      home_team_players = player_stats.select {|p| p.team_id === game.home_team_id }
-      away_team_players = player_stats.select {|p| p.team_id === game.away_team_id }
 
       home_team_owner = game.home_team.current_owner.first_name
       away_team_owner = game.away_team.current_owner.first_name
 
-      team_scores[home_team_owner] = (team_scores[home_team_owner] + calculate_team_best_ball(home_team_players, position_hash)).round(2)
-      team_scores[away_team_owner] = (team_scores[away_team_owner] + calculate_team_best_ball(away_team_players, position_hash)).round(2)
+      home_team_week_score = 0
+      away_team_week_score = 0
+
+      use_cache = !params[:recalculate]
+
+      if use_cache && (game.home_best_ball_score && game.away_best_ball_score)
+        home_team_week_score = game.home_best_ball_score
+        away_team_week_score = game.away_best_ball_score
+      else
+        player_stats = PlayerStat.where(week: game.week, season: game.season, team_id: team_ids)
+        home_team_players = player_stats.select {|p| p.team_id === game.home_team_id }
+        away_team_players = player_stats.select {|p| p.team_id === game.away_team_id }
+
+        home_team_week_score = calculate_team_best_ball(home_team_players, position_hash)
+        away_team_week_score = calculate_team_best_ball(away_team_players, position_hash)
+
+        game.home_best_ball_score = home_team_week_score
+        game.away_best_ball_score = away_team_week_score
+        game.save!
+      end
+
+      team_scores[home_team_owner] = (team_scores[home_team_owner] + home_team_week_score).round(2)
+      team_scores[away_team_owner] = (team_scores[away_team_owner] + away_team_week_score).round(2)
       actual_scores[home_team_owner] = (actual_scores[home_team_owner] + game.home_score.to_f).round(2)
       actual_scores[away_team_owner] = (actual_scores[away_team_owner] + game.away_score.to_f).round(2)
     end
