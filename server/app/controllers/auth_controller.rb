@@ -5,6 +5,7 @@ class AuthController < ApplicationController
     if @user && @user.authenticate(params[:password])
       payload = { user_id: @user.to_param }
       token = encode_token(payload)
+      # TODO: Abstract this to somewhere shared across controllers
       serialized_user = {
         first_name: @user.first_name,
         last_name: @user.last_name,

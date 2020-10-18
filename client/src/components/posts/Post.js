@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useActiveUserState } from '../../context/ActiveUserContext';
 import MarkdownEditor from '../../core/MardownEditor';
 import { colors, sm } from '../../core/style';
-import { isEmpty } from 'lodash';
+import { isEmpty, get } from 'lodash';
 import moment from 'moment'
 
 import { getPost, saveComment } from './api';
@@ -147,8 +147,8 @@ const MyImage = props => {
 };
 
 function Comment(props) {
-  const { author, body, created_at: createdAt } = props;
-  const { username } = author;
+  const { author = {}, body, created_at: createdAt } = props;
+  const { username = '' } = author;
 
   const date = moment(createdAt).format('LT MMM Do, YYYY')
 
@@ -187,7 +187,7 @@ function Post() {
   useEffect(() => {
     getPost(id).then(post => {
       setTitle(post.title)
-      setUsername(`${post.user.first_name} ${post.user.last_name}`)
+      setUsername(`${get(post, ['user', 'first_name'], '')} ${get(post, ['user', 'last_name'], '')}`)
       setCreatedDate(moment(post.created_at).format('MMMM Do, YYYY'))
       setContent(post.content)
       setComments(post.comments)
@@ -226,7 +226,7 @@ function Post() {
           Comments
         </Header>
         {
-          comments.length !== 0 ?
+          comments && comments.length !== 0 ?
             (
               comments.map(comment => (
                 <Comment key={comment.id} {...comment} />
