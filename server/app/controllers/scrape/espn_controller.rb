@@ -267,14 +267,24 @@ class Scrape::EspnController < ScrapeController
 
     error_messages = []
 
-    (1..17).each do |week|
+    if params[:week].present?
       query_params = {
         :view => 'mMatchupScore',
-        :scoringPeriodId => week
+        :scoringPeriodId => params[:week]
       }
       response = HTTParty.get(url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
       api_mapper = Mappers::ApiMapper.new(response['schedule'])
-      error_messages += api_mapper.persist_player_stats(year, week)
+      error_messages += api_mapper.persist_player_stats(year, params[:week])
+    else
+      (1..17).each do |week|
+        query_params = {
+          :view => 'mMatchupScore',
+          :scoringPeriodId => week
+        }
+        response = HTTParty.get(url, { :query => query_params, :headers => { 'Cookie' => cookie_hash.to_cookie_string }})
+        api_mapper = Mappers::ApiMapper.new(response['schedule'])
+        error_messages += api_mapper.persist_player_stats(year, week)
+      end
     end
 
     render :json => { success: true, error_messages: error_messages }
