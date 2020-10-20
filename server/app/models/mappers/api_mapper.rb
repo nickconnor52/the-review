@@ -9,7 +9,7 @@ class Mappers::ApiMapper
       player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access)
       successful_upsert = player_mapper.persist
       unless successful_upsert
-        @error_messages < player[:player][:fullName]
+        @error_messages << player['player']['fullName']
       end
     end
     @error_messages
@@ -20,7 +20,7 @@ class Mappers::ApiMapper
       transaction_mapper = Mappers::TransactionMapper.new(player.with_indifferent_access)
       successful_upsert = transaction_mapper.persist
       unless successful_upsert
-        @error_messages < player[:player][:fullName]
+        @error_messages << player['player']['fullName']
       end
     end
     @error_messages
@@ -32,7 +32,7 @@ class Mappers::ApiMapper
       player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access)
       successful_upsert = player_mapper.persist_lineup
       unless successful_upsert
-        @error_messages < player[:player][:fullName]
+        @error_messages << player['player']['fullName']
       end
     end
     @error_messages
@@ -43,7 +43,7 @@ class Mappers::ApiMapper
       game_mapper = Mappers::ScheduleMapper.new(game.with_indifferent_access, year)
       successful_upsert = game_mapper.persist
       unless successful_upsert
-        @error_messages < game[:away_team_id]
+        @error_messages << game['away_team_id']
       end
     end
     @error_messages
@@ -54,7 +54,7 @@ class Mappers::ApiMapper
       owner_mapper = Mappers::OwnerMapper.new(owner.with_indifferent_access)
       successful_upsert = owner_mapper.persist
       unless successful_upsert
-        @error_messages < player[:owner][:lastName]
+        @error_messages << player['owner']['lastName']
       end
     end
     @error_messages
@@ -65,7 +65,7 @@ class Mappers::ApiMapper
       team_mapper = Mappers::TeamMapper.new(team.with_indifferent_access)
       successful_upsert = team_mapper.persist
       unless successful_upsert
-        @error_messages < team[:nickname]
+        @error_messages << team['nickname']
       end
     end
     @error_messages
@@ -76,7 +76,7 @@ class Mappers::ApiMapper
       stat_mapper = Mappers::SeasonStatMapper.new(team.with_indifferent_access, year)
       successful_upsert = stat_mapper.persist
       unless successful_upsert
-        @error_messages < team[:nickname]
+        @error_messages << team['nickname']
       end
     end
     @error_messages
@@ -86,7 +86,7 @@ class Mappers::ApiMapper
     draft_mapper = Mappers::DraftMapper.new(@response.with_indifferent_access)
     successful_upsert = draft_mapper.persist
     unless successful_upsert
-      @error_messages < 'There was an issue with the draft'
+      @error_messages << 'There was an issue with the draft'
     end
     @error_messages
   end
@@ -96,7 +96,7 @@ class Mappers::ApiMapper
       team_mapper = Mappers::ProTeamMapper.new(conference.with_indifferent_access)
       successful_upsert = team_mapper.persist
       unless successful_upsert
-        @error_messages < conference[:name]
+        @error_messages << conference['name']
       end
     end
     @error_messages
@@ -107,7 +107,7 @@ class Mappers::ApiMapper
       roster_mapper = Mappers::RosterMapper.new(team.with_indifferent_access, year)
       successful_upsert = roster_mapper.persist
       unless successful_upsert
-        @error_messages < team['id']
+        @error_messages << team['id']
       end
     end
     @error_messages
@@ -121,7 +121,7 @@ class Mappers::ApiMapper
           player_mapper = Mappers::PlayerStatMapper.new(p['playerPoolEntry']['player'].with_indifferent_access, year, week, espn_team_id)
           successful_upsert = player_mapper.persist
           unless successful_upsert
-            @error_messages < espn_team_id['id']
+            @error_messages << espn_team_id['id']
           end
         end
       end
@@ -132,7 +132,7 @@ class Mappers::ApiMapper
           player_mapper = Mappers::PlayerStatMapper.new(p['playerPoolEntry']['player'].with_indifferent_access, year, week, espn_team_id)
           successful_upsert = player_mapper.persist
           unless successful_upsert
-            @error_messages < espn_team_id['id']
+            @error_messages << espn_team_id['id']
           end
         end
       end
@@ -380,7 +380,7 @@ class Mappers::TransactionMapper
     transactions = @player_info['transactions']
     transactions.each do |t|
       upsert_transaction(t)
-    end
+    end unless transactions.nil?
   end
 
   def upsert_transaction(transaction_info)
