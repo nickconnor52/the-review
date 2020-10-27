@@ -239,45 +239,45 @@ const draftRanking = `
 | ** Team ** | ** Power Index ** |
 | ---------- | ----------------- |
 | ** Mark ** | 100 |
-| ** Nick ** | 93 |
-| ** Daniel ** | 88 |
+| ** Daniel ** | 86 |
+| ** Nick ** | 83 |
+| ** Matt ** | 78 |
 | ** Josiah ** | 77 |
-| ** Matt ** | 76 |
-| ** Gary ** | 70 |
-| ** Luke ** | 64 |
-| ** Josias ** | 64 |
+| ** Gary ** | 71 |
+| ** Josias ** | 68 |
+| ** Luke ** | 66 |
 | ** Derek ** | 59 |
-| ** Spencer ** | 46 |
+| ** Spencer ** | 41 |
 `
 
 const dynastyRanking = `
 | ** Team ** | ** Power Index ** |
 | ---------- | ----------------- |
 | ** Nick ** | 100 |
-| ** Mark ** | 83 |
+| ** Mark ** | 84 |
 | ** Matt ** | 79 |
 | ** Josiah ** | 75 |
 | ** Daniel ** | 73 |
-| ** Luke ** | 69 |
-| ** Josias ** | 67 |
-| ** Gary ** | 67 |
-| ** Derek ** | 65 |
-| ** Spencer ** | 50 |
+| ** Luke ** | 70 |
+| ** Josias ** | 69 |
+| ** Gary ** | 68 |
+| ** Derek ** | 63 |
+| ** Spencer ** | 51 |
 `
 
 const playoffChances = `
 | ** Team ** | ** Odds ** | ** Champion ** |
 | ---------- | ----------------- |
-| ** Mark ** | 95% | 36% |
-| ** Josiah ** | 87% | 17% |
-| ** Daniel ** | 67% | 16% |
-| ** Josias ** | 55% | 7% |
-| ** Nick ** | 55% | 17% |
-| ** Matt ** | 21% | 3% |
-| ** Gary ** | 19% | 4% |
+| ** Mark ** | 98% | 38% |
+| ** Josiah ** | 78% | 18% |
+| ** Josias ** | 78% | 12% |
+| ** Nick ** | 54% | 14% |
+| ** Daniel ** | 41% | 9% |
+| ** Gary ** | 39% | 8% |
+| ** Matt ** | 11% | 2% |
 | ** Derek ** | < 1% | < 1% |
-| ** Spencer ** | < 1% | < 1% |
 | ** Luke ** | < 1% | < 1% |
+| ** Spencer ** | < 1% | < 1% |
 `
 
 const SubTitle = styled.div`
@@ -314,7 +314,7 @@ function Home() {
     });
   }, []);
 
-  const updated = '10/20/20'
+  const updated = '10/27/20'
   return (
     <HomeContainer>
       <Title>
