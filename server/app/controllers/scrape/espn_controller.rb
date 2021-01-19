@@ -261,7 +261,7 @@ class Scrape::EspnController < ScrapeController
     cookie_hash = HTTParty::CookieHash.new
     cookie_hash.add_cookies(cookie_from_params)
 
-    year = params[:year] || Date.today.year
+    year = params[:year] || '2020'
 
     url = "https://fantasy.espn.com/apis/v3/games/ffl/seasons/#{year}/segments/0/leagues/#{ENV['LEAGUE_ID']}?view=mMatchup&view=mMatchupScore"
 

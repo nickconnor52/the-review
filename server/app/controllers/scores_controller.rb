@@ -1,6 +1,6 @@
 class ScoresController < ApplicationController
   def calculate_best_ball
-    games = Game.where(season: 2020).all
+    games = Game.where(season: 2020).where('week::Int < ?', 13).all
     position_hash = {}
     position_hash['qb'] = Position.select(:id).find_by_name('Quarterback').to_param
     position_hash['rb'] = Position.select(:id).find_by_name('Running Back').to_param
