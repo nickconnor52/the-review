@@ -5,11 +5,11 @@ class Mappers::ApiMapper
   end
 
   def persist_players
-    @response.each do |player|
-      player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access)
+    @response.each do |id, player|
+      player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access, id)
       successful_upsert = player_mapper.persist
       unless successful_upsert
-        @error_messages << player['player']['fullName']
+        @error_messages << id
       end
     end
     @error_messages
@@ -146,31 +146,34 @@ class Mappers::PlayerMapper
                 :espn_fantasy_team_id, :espn_pro_team_id, :espn_position_id,
                 :jersey_number, :status
 
-  def initialize(player)
-    @first_name = player[:player][:firstName]
-    @last_name = player[:player][:lastName]
-    @full_name = player[:player][:fullName]
-    @espn_player_id = player[:id]
-    @espn_fantasy_team_id = player[:onTeamId]
-    @espn_pro_team_id = player[:player][:proTeamId]
-    @espn_position_id = player[:player][:defaultPositionId]
-    @jersey_number = player[:player][:jersey]
+  def initialize(player, id)
+    @first_name = player[:first_name]
+    @last_name = player[:last_name]
+    @full_name = player[:full_name]
+    @espn_player_id = player[:espn_id]
+    @sleeper_player_id = id
+    @sleeper_pro_team_id = player[:team]
+    @sleeper_position_id = player[:position]
+    @jersey_number = player[:number]
     @status = player[:status]
-    # TODO - PLAYER -> STATS
   end
 
   def persist
-    player = Player.find_or_initialize_by(espn_id: @espn_player_id)
+    if @espn_player_id.nil?
+      player = Player.find_or_initialize_by(sleeper_id: @sleeper_player_id)
+    else
+      player = Player.find_or_initialize_by(espn_id: @espn_player_id)
+    end
+    player.sleeper_id = @sleeper_player_id
     player.first_name = @first_name
     player.last_name = @last_name
     player.full_name = @full_name
-    player.espn_fantasy_team_id = @espn_fantasy_team_id
-    player.espn_pro_team_id = @espn_pro_team_id
-    player.espn_position_id = @espn_position_id
-    player.position = Position.find_by(espn_id: @espn_position_id)
+    player.sleeper_pro_team_id = @sleeper_pro_team_id
+    player.sleeper_position_id = @sleeper_position_id
+    player.position = Position.find_by(abbreviation: @sleeper_position_id)
     player.jersey_number = @jersey_number
     player.status = @status
-    player.pro_team = ProTeam.find_by(espn_id: @espn_pro_team_id)
+    player.pro_team = ProTeam.find_by(abbreviation: @sleeper_pro_team_id)
     player.save
   end
 

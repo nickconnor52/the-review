@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210901200701) do
+ActiveRecord::Schema.define(version: 20210901205900) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -85,10 +85,10 @@ ActiveRecord::Schema.define(version: 20210901200701) do
     t.string "first_name", null: false
     t.string "last_name", null: false
     t.string "full_name", null: false
-    t.string "espn_id", null: false
+    t.string "espn_id"
     t.string "espn_fantasy_team_id"
     t.string "team_id"
-    t.string "espn_pro_team_id", null: false
+    t.string "espn_pro_team_id"
     t.string "pro_team_id"
     t.string "espn_position_id"
     t.string "position_id"
@@ -98,6 +98,9 @@ ActiveRecord::Schema.define(version: 20210901200701) do
     t.datetime "updated_at", null: false
     t.boolean "on_trade_block", default: false
     t.string "sleeper_id"
+    t.string "sleeper_position_id"
+    t.string "sleeper_pro_team_id"
+    t.string "sleeper_fantasy_team_id"
   end
 
   create_table "players_rosters", force: :cascade do |t|
