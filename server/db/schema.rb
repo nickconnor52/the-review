@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201018151650) do
+ActiveRecord::Schema.define(version: 20210901200701) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20201018151650) do
     t.datetime "updated_at", null: false
     t.string "team_id"
     t.string "espn_id"
+    t.string "sleeper_id"
   end
 
   create_table "player_stats", force: :cascade do |t|
@@ -96,6 +97,7 @@ ActiveRecord::Schema.define(version: 20201018151650) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "on_trade_block", default: false
+    t.string "sleeper_id"
   end
 
   create_table "players_rosters", force: :cascade do |t|
@@ -113,6 +115,7 @@ ActiveRecord::Schema.define(version: 20201018151650) do
     t.string "espn_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "sleeper_id"
   end
 
   create_table "posts", force: :cascade do |t|
@@ -135,6 +138,7 @@ ActiveRecord::Schema.define(version: 20201018151650) do
     t.string "conference_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "sleeper_id"
   end
 
   create_table "rosters", force: :cascade do |t|
@@ -155,9 +159,9 @@ ActiveRecord::Schema.define(version: 20201018151650) do
 
   create_table "team_identifiers", force: :cascade do |t|
     t.string "team_id", null: false
-    t.string "location", null: false
+    t.string "location"
     t.string "nickname", null: false
-    t.string "abbreviation", null: false
+    t.string "abbreviation"
     t.string "logo_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -170,6 +174,7 @@ ActiveRecord::Schema.define(version: 20201018151650) do
     t.string "user_id"
     t.datetime "trade_block_updated_at"
     t.string "trade_block_position_id", default: "0"
+    t.string "sleeper_id"
   end
 
   create_table "teams_transactions", force: :cascade do |t|
@@ -200,6 +205,7 @@ ActiveRecord::Schema.define(version: 20201018151650) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "note"
+    t.string "sleeper_id"
   end
 
   create_table "users", force: :cascade do |t|

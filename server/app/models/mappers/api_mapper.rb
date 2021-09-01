@@ -219,15 +219,17 @@ class Mappers::TeamMapper
   attr_accessor :espn_id, :location, :nickname, :abbreviation, :logo_url
 
   def initialize(team)
-    @espn_id = team[:id]
-    @location = team[:location]
-    @nickname = team[:nickname]
-    @abbreviation = team[:abbrev]
-    @logo_url = team[:logo]
+    @sleeper_id = team[:user_id]
+    @nickname = team[:metadata][:team_name] || team[:display_name]
+    if team[:metadata][:avatar].nil?
+      @logo_url = "https://sleepercdn.com/avatars/#{team[:avatar]}"
+    else
+      @logo_url = team[:metadata][:avatar]
+    end
   end
 
   def persist
-    team = Team.find_or_initialize_by(espn_id: @espn_id)
+    team = Team.find_or_initialize_by(sleeper_id: @sleeper_id)
     team.save
     team_info = TeamIdentifier.find_or_initialize_by(team_id: team.to_param, location: @location, nickname: @nickname)
     team_info.abbreviation = @abbreviation

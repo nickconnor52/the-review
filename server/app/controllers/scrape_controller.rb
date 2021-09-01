@@ -14,4 +14,16 @@ class ScrapeController < ApplicationController
   def history_url
     "https://fantasy.espn.com/apis/v3/games/ffl/leagueHistory/#{ENV['LEAGUE_ID']}?"
   end
+
+  def base_sleeper_url
+    'https://api.sleeper.app/v1'
+  end
+
+  def league_url
+    "#{base_sleeper_url}/league/#{league_id}"
+  end
+
+  def league_id
+    '669956719320846336'
+  end
 end
