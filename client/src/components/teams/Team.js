@@ -135,7 +135,6 @@ function Team() {
 
   const current_owner = team.current_owner || {};
 
-  const location = team_info.location || '';
   const nickname = team_info.nickname || '';
   const logo_url = team_info.logo_url || '';
   const owner_name = `${current_owner.first_name || ''} ${current_owner.last_name || ''}`
@@ -179,7 +178,7 @@ function Team() {
   return (
     <PageContainer>
       <BodyContainer>
-        <TeamHeader>{`${location} ${nickname}`}</TeamHeader>
+        <TeamHeader>{`${nickname}`}</TeamHeader>
         <TeamInfoContainer>
           <LogoContainer>
             <TeamLogo src={logo_url} alt='Team Logo' />

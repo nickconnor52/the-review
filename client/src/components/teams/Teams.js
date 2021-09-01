@@ -85,7 +85,7 @@ function Teams() {
       <Header>Teams</Header>
         {teams.map(team => {
           const { id, team_info } = team;
-          const { location, nickname, logo_url } = team_info;
+          const { nickname, logo_url } = team_info;
           return (
             <TeamContainer key={nickname}>
               <TeamCard>
@@ -93,7 +93,7 @@ function Teams() {
                   <TeamLogo src={logo_url}/>
                 </LogoContainer>
                 <TeamLink>
-                  <Link to={`/teams/${id}`}>{`${location} ${nickname}`}</Link>
+                  <Link to={`/teams/${id}`}>{`${nickname}`}</Link>
                 </TeamLink>
             </TeamCard>
             </TeamContainer>
