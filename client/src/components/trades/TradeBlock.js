@@ -175,7 +175,7 @@ function TeamView(props) {
   return (
     <TradeCard>
       <TitleContainer>
-        <TeamName>{`${location} ${nickname}`}</TeamName>
+        <TeamName>{`${nickname}`}</TeamName>
         <Date>Last Updated: {moment(updatedDate).format('MMMM Do, YYYY')}</Date>
       </TitleContainer>
       <TeamsContainer>

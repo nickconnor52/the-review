@@ -193,7 +193,7 @@ function TradeView(props) {
       </Subtitle>
       <TeamsContainer>
         <TeamColumn>
-          <TeamName>{`${teamA.location} ${teamA.nickname}`}</TeamName>
+          <TeamName>{`${teamA.nickname}`}</TeamName>
           <div style={{fontStyle: 'italic', marginBottom: '1em' }}>Received</div>
           {
             teamAPieces.map(piece => (
@@ -202,7 +202,7 @@ function TradeView(props) {
           }
         </TeamColumn>
         <TeamColumn>
-          <TeamName>{`${teamB.location} ${teamB.nickname}`}</TeamName>
+          <TeamName>{`${teamB.nickname}`}</TeamName>
           <div style={{fontStyle: 'italic', marginBottom: '1em' }}>Received</div>
           {
             teamBPieces.map(piece => (

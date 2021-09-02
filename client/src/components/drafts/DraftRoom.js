@@ -78,10 +78,9 @@ function DraftRoom() {
   ];
 
   const getTeamInfo = (pick) => {
-    const location = get(pick, ['team_info', 'location'], 'Not Listed');
     const nickname = get(pick, ['team_info', 'nickname'], 'Not Listed');
 
-    return `${location} ${nickname}`
+    return `${nickname}`
   }
 
   const rowData = draftPicks.map(pick => ({
