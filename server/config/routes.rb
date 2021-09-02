@@ -58,6 +58,7 @@ Rails.application.routes.draw do
       scope :sleeper do
         get 'sync_teams' => 'sleeper#sync_teams'
         get 'sync_all_players' => 'sleeper#sync_all_players'
+        get 'sync_active_lineups' => 'sleeper#sync_active_lineups'
 
       end
     end

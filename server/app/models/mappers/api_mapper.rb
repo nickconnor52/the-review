@@ -27,12 +27,13 @@ class Mappers::ApiMapper
   end
 
   # Loop through all players and assign TeamID -- will overwrite current TeamID
+  # Reset all players on a roster, overwrite each team's current players
   def persist_active_lineups
-    @response.each do |player|
-      player_mapper = Mappers::PlayerMapper.new(player.with_indifferent_access)
-      successful_upsert = player_mapper.persist_lineup
+    @response.each do |team|
+      team_mapper = Mappers::LineupMapper.new(team.with_indifferent_access)
+      successful_upsert = team_mapper.persist
       unless successful_upsert
-        @error_messages << player['player']['fullName']
+        @error_messages << team['owner_id']
       end
     end
     @error_messages
@@ -176,27 +177,6 @@ class Mappers::PlayerMapper
     player.pro_team = ProTeam.find_by(abbreviation: @sleeper_pro_team_id)
     player.save
   end
-
-  def persist_lineup
-    pro_team = ProTeam.find_by(espn_id: @espn_pro_team_id)
-    team = Team.find_by(espn_id: @espn_fantasy_team_id)
-    player = Player.find_by(espn_id: @espn_player_id)
-
-    if player.nil?
-      persist()
-      return true
-    end
-
-    player.espn_fantasy_team_id = @espn_fantasy_team_id
-    player.team_id = team.to_param
-    player.espn_pro_team_id = @espn_pro_team_id
-    player.pro_team = pro_team
-    if @espn_fantasy_team_id === 0
-      player.on_trade_block = false
-    end
-
-    player.save
-  end
 end
 
 class Mappers::OwnerMapper
@@ -238,6 +218,33 @@ class Mappers::TeamMapper
     team_info.abbreviation = @abbreviation
     team_info.logo_url = @logo_url
     team_info.save
+  end
+end
+
+class Mappers::LineupMapper
+  def initialize(team)
+    @team_sleeper_id = team[:owner_id]
+    @active_players = team[:players]
+  end
+
+  def persist
+    team = Team.find_by(sleeper_id: @team_sleeper_id)
+    current_team = Player.where(team_id: team.to_param)
+    cut_players = current_team.select{ |player| !@active_players.include?(player.sleeper_id)}
+    cut_players.each do |player|
+      player.on_trade_block = false
+      player.team_id = nil
+      player.sleeper_fantasy_team_id = nil
+      player.espn_fantasy_team_id = nil
+      player.save
+    end
+
+    @active_players.each do |player_id|
+      player = Player.find_by(sleeper_id: player_id)
+      player.sleeper_fantasy_team_id = @team_sleeper_id
+      player.team_id = team.to_param
+      player.save
+    end
   end
 end
 
