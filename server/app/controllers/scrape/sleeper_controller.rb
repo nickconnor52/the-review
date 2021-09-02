@@ -30,4 +30,16 @@ class Scrape::SleeperController < ScrapeController
     error_messages = api_mapper.persist_players
     render :json => { success: true, error_messages: error_messages }
   end
+
+  def sync_schedule
+    # TODO: HANDLE NUMBER
+    year = 2021
+    week = 1
+    response = HTTParty.get("#{league_url}/matchups/#{1}")
+    api_mapper = Mappers::ApiMapper.new(response)
+    error_messages = api_mapper.persist_schedule(year, week)
+    render :json => { success: true, error_messages: error_messages }
+  end
+
+
 end

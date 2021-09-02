@@ -60,6 +60,7 @@ Rails.application.routes.draw do
         get 'sync_all_players' => 'sleeper#sync_all_players'
         get 'sync_active_lineups' => 'sleeper#sync_active_lineups'
         get 'sync_new_transactions' => 'sleeper#sync_new_transactions'
+        get 'sync_schedule' => 'sleeper#sync_schedule'
 
       end
     end

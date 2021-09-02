@@ -39,12 +39,12 @@ class Mappers::ApiMapper
     @error_messages
   end
 
-  def persist_schedule(year)
+  def persist_schedule(year, week)
     @response.each do |game|
-      game_mapper = Mappers::ScheduleMapper.new(game.with_indifferent_access, year)
+      game_mapper = Mappers::ScheduleMapper.new(game.with_indifferent_access, year, week)
       successful_upsert = game_mapper.persist
       unless successful_upsert
-        @error_messages << game['away_team_id']
+        @error_messages << game['matchup_id']
       end
     end
     @error_messages
@@ -311,19 +311,30 @@ class Mappers::DraftMapper
 end
 
 class Mappers::ScheduleMapper
-  def initialize(game, year)
-    @game = game
+  def initialize(game, year, week)
+    @week = week
     @year = year
-    @home_team = Team.find_by(espn_id: game[:home][:teamId])
-    @away_team = Team.find_by(espn_id: game[:away][:teamId])
+    @team_id = Team.find_by(sleeper_roster_id: game[:roster_id]).to_param
+    @matchup_id = game[:matchup_id].to_s
+    @points = game[:points]
   end
 
   def persist
-    game = Game.find_or_initialize_by(season: @year, week: @game[:matchupPeriodId], away_team_id: @away_team.to_param, home_team_id: @home_team.to_param)
-    game.away_score = @game['away']['totalPoints']
-    game.home_score = @game['home']['totalPoints']
-    game.winner = @game['winner']
-    game.playoff_tier_type = @game['playoffTierType']
+    game = Game.find_or_initialize_by(season: @year, week: @week, sleeper_matchup_id: @matchup_id)
+    if game.home_team_id.nil?
+      game.home_team_id = @team_id
+      game.home_score = @points
+    else
+      game.away_team_id = @team_id
+      game.away_score = @points
+    end
+    # TODO: CHECK THIS
+    unless @score.to_i === 0
+      game.winner = (game.away_score.to_f > game.home_score.to_f) ? "AWAY" : "HOME"
+    end
+    # TODO - NEED EXAMPLE
+    game.playoff_tier_type = "NONE"
+
     game.save
   end
 end
