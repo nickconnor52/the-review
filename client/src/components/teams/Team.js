@@ -254,6 +254,7 @@ function Team() {
             <Header style={{ marginLeft: 'auto', marginRight: 'auto' }}>Current Lineup</Header>
             <YearDropdown>
               <select onChange={(e) => setRosterYear(e.target.value)} id="rosterPicker">
+                <option key='2021' value="2021">2021</option>
                 <option key='2020' value="2020">2020</option>
                 <option key='2019'value="2019">2019</option>
                 <option key='2018'value="2018">2018</option>
