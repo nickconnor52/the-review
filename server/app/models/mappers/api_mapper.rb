@@ -16,11 +16,11 @@ class Mappers::ApiMapper
   end
 
   def persist_transactions
-    @response.each do |player|
-      transaction_mapper = Mappers::TransactionMapper.new(player.with_indifferent_access)
+    @response.each do |transactions|
+      transaction_mapper = Mappers::TransactionMapper.new(transactions.with_indifferent_access)
       successful_upsert = transaction_mapper.persist
       unless successful_upsert
-        @error_messages << player['player']['fullName']
+        @error_messages << transactions["transaction_id"]
       end
     end
     @error_messages
@@ -225,10 +225,14 @@ class Mappers::LineupMapper
   def initialize(team)
     @team_sleeper_id = team[:owner_id]
     @active_players = team[:players]
+    @roster_id = team[:roster_id]
   end
 
   def persist
     team = Team.find_by(sleeper_id: @team_sleeper_id)
+    team.sleeper_roster_id = @roster_id
+    team.save!
+
     current_team = Player.where(team_id: team.to_param)
     cut_players = current_team.select{ |player| !@active_players.include?(player.sleeper_id)}
     cut_players.each do |player|
@@ -384,52 +388,60 @@ class Mappers::PlayerStatMapper
 end
 
 class Mappers::TransactionMapper
-  def initialize(player)
-    @player_info = player
+  def initialize(transaction)
+    @sleeper_transaction_id = transaction[:transaction_id]
+    @transaction_type = transaction[:type]
+    @date = transaction[:status_updated]
+    @roster_ids = transaction[:roster_ids]
+    @drops = transaction[:drops]
+    @adds = transaction[:adds]
   end
 
   def persist
-    transactions = @player_info['transactions']
-    transactions.each do |t|
-      upsert_transaction(t)
-    end unless transactions.nil?
-  end
-
-  def upsert_transaction(transaction_info)
-    unless transaction_info['type'] === 'DRAFT'
-      transaction = Transaction.find_or_initialize_by(espn_id: transaction_info['id'])
-      date = transaction_info['acceptedDate'] ? transaction_info['acceptedDate'] : transaction_info['proposedDate']
-      transaction.accepted_date = DateTime.strptime(date.to_s,'%Q')
-      transaction.transaction_type = transaction_info['type']
-      transaction.save
-
-      transaction_teams = []
-
-      transaction_info['items'].each do |piece|
-        piece = upsert_pieces(piece, transaction.to_param)
-        from_team_info = piece.source_team
-        to_team_info = piece.receiving_team
-        transaction_teams << Team.find(from_team_info.team_id) unless from_team_info.blank?
-        transaction_teams << Team.find(to_team_info.team_id) unless to_team_info.blank?
-      end unless transaction_info['items'].blank?
-      transaction.teams = transaction_teams.uniq
+    transaction = Transaction.find_or_initialize_by(sleeper_id: @sleeper_transaction_id)
+    transaction.accepted_date = DateTime.strptime(@date.to_s,'%Q')
+    transaction.transaction_type = @transaction_type
+    transaction_teams = []
+    @roster_ids.each do |id|
+      team = Team.find_by(sleeper_roster_id: id)
+      transaction_teams << team
     end
+
+    transaction.teams = transaction_teams.uniq
+
+    transaction.save!
+
+    if @transaction_type === 'free_agent'
+      @drops.each do |player_id, roster_id|
+        team_id = Team.find_by(sleeper_roster_id: roster_id).to_param
+        upsert_piece(player_id, nil, team_id, transaction.to_param, "DROP")
+      end unless @drops.nil?
+
+      @adds.each do |player_id, roster_id|
+        team_id = Team.find_by(sleeper_roster_id: roster_id).to_param
+        upsert_piece(player_id, team_id, nil, transaction.to_param, "ADD")
+      end unless @adds.nil?
+    end
+
+    if @transaction_type === 'trade'
+      # TODO - need an example to use
+    end
+
+    transaction.save!
   end
 
-  def upsert_pieces(piece_info, transaction_id)
-    player = Player.find_by(espn_id: piece_info['playerId'])
-    from_team = Team.find_by(espn_id: piece_info['fromTeamId'])
-    to_team = Team.find_by(espn_id: piece_info['toTeamId'])
+  def upsert_piece(player_id, to_team_id, from_team_id, transaction_id, transaction_type)
+    player = Player.find_by(sleeper_id: player_id)
+    from_team = Team.find_by(id: from_team_id)
+    to_team = Team.find_by(id: to_team_id)
     piece = TransactionPiece.find_or_initialize_by(
       transaction_id: transaction_id,
       player_id: player.to_param,
       from_team_id:from_team.to_param,
       to_team_id: to_team.to_param
     )
-    piece.action_type = piece_info['type']
+    piece.action_type = transaction_type
 
-    piece.save
-
-    piece
+    piece.save!
   end
 end

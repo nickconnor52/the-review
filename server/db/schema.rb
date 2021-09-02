@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20210901205900) do
+ActiveRecord::Schema.define(version: 20210902192754) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -178,6 +178,7 @@ ActiveRecord::Schema.define(version: 20210901205900) do
     t.datetime "trade_block_updated_at"
     t.string "trade_block_position_id", default: "0"
     t.string "sleeper_id"
+    t.string "sleeper_roster_id"
   end
 
   create_table "teams_transactions", force: :cascade do |t|
@@ -201,7 +202,7 @@ ActiveRecord::Schema.define(version: 20210901205900) do
   end
 
   create_table "transactions", force: :cascade do |t|
-    t.string "espn_id", null: false
+    t.string "espn_id"
     t.string "accepted_date"
     t.string "transaction_type"
     t.string "bid_amount"
