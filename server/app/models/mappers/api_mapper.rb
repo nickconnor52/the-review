@@ -84,10 +84,12 @@ class Mappers::ApiMapper
   end
 
   def persist_draft
-    draft_mapper = Mappers::DraftMapper.new(@response.with_indifferent_access)
-    successful_upsert = draft_mapper.persist
-    unless successful_upsert
-      @error_messages << 'There was an issue with the draft'
+    @response.each do |pick|
+      draft_mapper = Mappers::DraftMapper.new(pick.with_indifferent_access)
+      successful_upsert = draft_mapper.persist
+      unless successful_upsert
+        @error_messages << 'There was an issue with the draft'
+      end
     end
     @error_messages
   end
@@ -287,26 +289,27 @@ class Mappers::ProTeamMapper
 end
 
 class Mappers::DraftMapper
-  def initialize(draftDetails)
-    @picks = draftDetails[:picks]
-    @date = draftDetails[:completeDate]
+  def initialize(pick)
+    @round = pick[:round]
+    @player_id = pick[:player_id]
+    @pick_number = pick[:pick_no]
+    @user_id = pick[:picked_by]
+    @round_pick_number = pick[:draft_slot]
   end
 
   def persist
-    draft_year = DateTime.strptime(@date.to_s,'%Q').year
+    # TODO: Automate this number
+    draft_year = 2021
     draft = Draft.find_or_initialize_by(year: draft_year)
     draft.save!
-    @picks.each do |pick|
-      draft_pick = DraftPick.find_or_initialize_by(draft_id: draft.id, overall_pick_number: pick['overallPickNumber'])
-      draft_pick.round_number = pick['roundId']
-      draft_pick.round_pick_number = pick['roundPickNumber']
-      player = Player.find_by(espn_id: pick['playerId'])
-      draft_pick.player_id = player.to_param
-      team = Team.find_by(espn_id: pick['teamId'])
-      draft_pick.team_id = team.to_param
-      draft_pick.original_pick_team_id = team.to_param
-      draft_pick.save
-    end
+
+    draft_pick = DraftPick.find_or_initialize_by(draft_id: draft.id, round_number: @round, round_pick_number: @round_pick_number)
+    draft_pick.overall_pick_number = @pick_number
+    player = Player.find_by(sleeper_id: @player_id)
+    draft_pick.player_id = player.to_param
+    team = Team.find_by(sleeper_id: @user_id)
+    draft_pick.team_id = team.to_param
+    draft_pick.save
   end
 end
 

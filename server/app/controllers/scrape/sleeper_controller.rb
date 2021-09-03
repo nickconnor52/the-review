@@ -1,7 +1,4 @@
 class Scrape::SleeperController < ScrapeController
-  def sync_owners
-    # TODO: Add Owner Sleeper Nickname / Avatar
-  end
   def sync_teams
     response = HTTParty.get("#{league_url}/users")
     api_mapper = Mappers::ApiMapper.new(response)
@@ -24,13 +21,6 @@ class Scrape::SleeperController < ScrapeController
     render :json => { success: true, error_messages: error_messages }
   end
 
-  def sync_all_players
-    response = HTTParty.get("#{base_sleeper_url}/players/nfl")
-    api_mapper = Mappers::ApiMapper.new(response)
-    error_messages = api_mapper.persist_players
-    render :json => { success: true, error_messages: error_messages }
-  end
-
   def sync_schedule
     # TODO: HANDLE NUMBER
     year = 2021
@@ -41,5 +31,41 @@ class Scrape::SleeperController < ScrapeController
     render :json => { success: true, error_messages: error_messages }
   end
 
+  def sync_player_stats
+    # TODO
+  end
 
+  def sync_owners
+    # TODO: Add Owner Sleeper Nickname / Avatar
+  end
+
+  def sync_draft
+    draft_id = '672128737071931392'
+    year = 2021
+    set_draft_order(year, draft_id)
+    response = HTTParty.get("#{base_sleeper_url}/draft/#{draft_id}/picks")
+    api_mapper = Mappers::ApiMapper.new(response)
+    error_messages = api_mapper.persist_draft
+    render :json => { success: true, error_messages: error_messages }
+  end
+
+  def sync_all_players
+    response = HTTParty.get("#{base_sleeper_url}/players/nfl")
+    api_mapper = Mappers::ApiMapper.new(response)
+    error_messages = api_mapper.persist_players
+    render :json => { success: true, error_messages: error_messages }
+  end
+
+  private
+
+  def set_draft_order(year, draft_id)
+    response = HTTParty.get("#{base_sleeper_url}/draft/#{draft_id}")
+    draft_picks = Draft.find_by(year: year).draft_picks
+    team_pick_mapper = response['slot_to_roster_id']
+    team_pick_mapper.each do |pick_number, roster_id|
+      team = Team.find_by(sleeper_roster_id: roster_id)
+      team_picks = draft_picks.where(original_pick_team_id: team.to_param)
+      team_picks.update_all(round_pick_number: pick_number)
+    end
+  end
 end
