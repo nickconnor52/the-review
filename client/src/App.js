@@ -238,46 +238,46 @@ const RankingsContainer = styled.div`
 const draftRanking = `
 | ** Team ** | ** Power Index ** |
 | ---------- | ----------------- |
-| ** Mark ** | 100 |
-| ** Nick ** | 83 |
-| ** Matt ** | 83 |
-| ** Gary ** | 73 |
-| ** Josiah ** | 70 |
-| ** Josias ** | 64 |
-| ** Luke ** | 62 |
-| ** Daniel ** | 61 |
-| ** Derek ** | 60 |
-| ** Spencer ** | 45 |
+| ** Nick ** | 100 |
+| ** Luke ** | 100 |
+| ** Mark ** | 96 |
+| ** Matt ** | 88 |
+| ** Dan ** | 85 |
+| ** Josias ** | 84 |
+| ** Derek ** | 75 |
+| ** Josiah ** | 74 |
+| ** Gary ** | 70 |
+| ** Spencer ** | 67 |
 `
 
 const dynastyRanking = `
 | ** Team ** | ** Power Index ** |
 | ---------- | ----------------- |
 | ** Nick ** | 100 |
-| ** Mark ** | 83 |
-| ** Matt ** | 83 |
-| ** Luke ** | 80 |
-| ** Daniel ** | 73 |
-| ** Josiah ** | 73 |
-| ** Josias ** | 71 |
-| ** Gary ** | 69 |
-| ** Derek ** | 68 |
-| ** Spencer ** | 49 |
+| ** Mark ** | 92 |
+| ** Luke ** | 85 |
+| ** Matt ** | 82 |
+| ** Josiah ** | 81 |
+| ** Dan ** | 75 |
+| ** Derek ** | 74 |
+| ** Josias ** | 73 |
+| ** Gary ** | 71 |
+| ** Spencer ** | 66 |
 `
 
 const playoffChances = `
 | ** Team ** | ** Odds ** | ** Champion ** |
 | ---------- | ----------------- |
-| ** Mark ** | 100% | 40% |
-| ** Josiah ** | 100% | 21% |
-| ** Gary ** | 100% | 24% |
-| ** Josias ** | 100% | 15% |
-| ** Nick ** | 0% | 0% |
-| ** Daniel ** | 0% | 0% |
-| ** Matt ** | 0% | 0% |
-| ** Derek ** | 0% | 0% |
-| ** Luke ** | 0% | 0% |
-| ** Spencer ** | 0% | 0% |
+| ** Nick ** | 100% | 100% |
+| ** Luke ** | TBD | TBD |
+| ** Mark ** | TBD | TBD |
+| ** Matt ** | TBD | TBD |
+| ** Josiah ** | TBD | TBD |
+| ** Josias ** | TBD | TBD |
+| ** Daniel ** | TBD | TBD |
+| ** Spencer ** | TBD | TBD |
+| ** Gary ** | TBD | TBD |
+| ** Derek ** | TBD | TBD |
 `
 
 const SubTitle = styled.div`
@@ -314,7 +314,7 @@ function Home() {
     });
   }, []);
 
-  const updated = '11/25/20'
+  const updated = '9/3/21'
   return (
     <HomeContainer>
       <Title>
