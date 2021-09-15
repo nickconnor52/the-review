@@ -239,45 +239,45 @@ const draftRanking = `
 | ** Team ** | ** Power Index ** |
 | ---------- | ----------------- |
 | ** Nick ** | 100 |
-| ** Luke ** | 100 |
-| ** Mark ** | 96 |
-| ** Matt ** | 88 |
-| ** Dan ** | 85 |
-| ** Josias ** | 84 |
-| ** Derek ** | 75 |
-| ** Josiah ** | 74 |
-| ** Gary ** | 70 |
-| ** Spencer ** | 67 |
+| ** Luke ** | 96 |
+| ** Mark ** | 90 |
+| ** Dan ** | 81 |
+| ** Gary ** | 78 |
+| ** Matt ** | 78 |
+| ** Josiah ** | 73 |
+| ** Derek ** | 72 |
+| ** Spencer ** | 69 |
+| ** Josias ** | 69 |
 `
 
 const dynastyRanking = `
 | ** Team ** | ** Power Index ** |
 | ---------- | ----------------- |
 | ** Nick ** | 100 |
-| ** Mark ** | 92 |
-| ** Luke ** | 85 |
-| ** Matt ** | 82 |
-| ** Josiah ** | 81 |
-| ** Dan ** | 75 |
+| ** Luke ** | 90 |
+| ** Dan ** | 83 |
+| ** Mark ** | 83 |
+| ** Matt ** | 80 |
 | ** Derek ** | 74 |
 | ** Josias ** | 73 |
-| ** Gary ** | 71 |
-| ** Spencer ** | 66 |
+| ** Josiah ** | 72 |
+| ** Gary ** | 70 |
+| ** Spencer ** | 67 |
 `
 
 const playoffChances = `
 | ** Team ** | ** Odds ** | ** Champion ** |
 | ---------- | ----------------- |
-| ** Nick ** | 100% | 100% |
-| ** Luke ** | TBD | TBD |
-| ** Mark ** | TBD | TBD |
-| ** Matt ** | TBD | TBD |
-| ** Josiah ** | TBD | TBD |
-| ** Josias ** | TBD | TBD |
-| ** Daniel ** | TBD | TBD |
-| ** Spencer ** | TBD | TBD |
-| ** Gary ** | TBD | TBD |
-| ** Derek ** | TBD | TBD |
+| ** Mark ** | 77% | 27% |
+| ** Nick ** | 67% | 25% |
+| ** Matt ** | 49% | 9% |
+| ** Spencer ** | 42% | 7% |
+| ** Luke ** | 40% | 10% |
+| ** Daniel ** | 39% | 8% |
+| ** Gary ** | 37% | 6% |
+| ** Josiah ** | 20% | 3% |
+| ** Derek ** | 16% | 2% |
+| ** Josias ** | 12% | 2% |
 `
 
 const SubTitle = styled.div`
@@ -314,7 +314,7 @@ function Home() {
     });
   }, []);
 
-  const updated = '9/3/21'
+  const updated = '9/15/21'
   return (
     <HomeContainer>
       <Title>

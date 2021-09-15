@@ -15,7 +15,8 @@ class Scrape::SleeperController < ScrapeController
 
   def sync_new_transactions
     # TODO: HANDLE THE TRANSACTION NUMBER AT THE END. INCREMENT SOMEHOW?
-    response = HTTParty.get("#{league_url}/transactions/1")
+    week = params[:week] || 2
+    response = HTTParty.get("#{league_url}/transactions/#{week}")
     api_mapper = Mappers::ApiMapper.new(response)
     error_messages = api_mapper.persist_transactions
     render :json => { success: true, error_messages: error_messages }
