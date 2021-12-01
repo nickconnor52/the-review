@@ -312,7 +312,7 @@ class Mappers::ScheduleMapper
 
   def persist
     game = Game.find_or_initialize_by(season: @year, week: @week, sleeper_matchup_id: @matchup_id)
-    if game.home_team_id.empty?
+    if game.home_team_id.blank?
       game.home_team_id = @team_id
       game.home_score = @points
     else
