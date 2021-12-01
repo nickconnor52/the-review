@@ -319,8 +319,7 @@ class Mappers::ScheduleMapper
       game.away_team_id = @team_id
       game.away_score = @points
     end
-    # TODO: CHECK THIS
-    unless @score.to_i === 0
+    unless @points.to_i === 0
       game.winner = (game.away_score.to_f > game.home_score.to_f) ? "AWAY" : "HOME"
     end
     # TODO - NEED EXAMPLE
