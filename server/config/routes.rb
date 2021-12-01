@@ -62,6 +62,7 @@ Rails.application.routes.draw do
         get 'sync_new_transactions' => 'sleeper#sync_new_transactions'
         get 'sync_schedule' => 'sleeper#sync_schedule'
         get 'sync_draft' => 'sleeper#sync_draft'
+        get 'sync_player_stats' => 'sleeper#sync_player_stats'
 
       end
     end

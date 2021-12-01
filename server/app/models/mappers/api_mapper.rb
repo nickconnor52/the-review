@@ -117,25 +117,13 @@ class Mappers::ApiMapper
   end
 
   def persist_player_stats(year, week)
-    @response.each do |game|
-      if players = game.dig('away', 'rosterForCurrentScoringPeriod', 'entries')
-        espn_team_id = game['away']['teamId']
-        players.each do |p|
-          player_mapper = Mappers::PlayerStatMapper.new(p['playerPoolEntry']['player'].with_indifferent_access, year, week, espn_team_id)
+    @response.each do |team|
+      if player_points = team.dig('players_points')
+        player_points.each_pair do |player_id, score|
+          player_mapper = Mappers::PlayerStatMapper.new(player_id, year, week, team['roster_id'], score)
           successful_upsert = player_mapper.persist
           unless successful_upsert
-            @error_messages << espn_team_id['id']
-          end
-        end
-      end
-
-      if players = game.dig('home', 'rosterForCurrentScoringPeriod', 'entries')
-        players.each do |p|
-          espn_team_id = game['home']['teamId']
-          player_mapper = Mappers::PlayerStatMapper.new(p['playerPoolEntry']['player'].with_indifferent_access, year, week, espn_team_id)
-          successful_upsert = player_mapper.persist
-          unless successful_upsert
-            @error_messages << espn_team_id['id']
+            @error_messages << team['roster_id']
           end
         end
       end
@@ -379,23 +367,19 @@ class Mappers::RosterMapper
 end
 
 class Mappers::PlayerStatMapper
-  def initialize(player, year, week, espn_team_id)
-    @player = player
+  def initialize(player_id, year, week, sleeper_team_id, score)
+    @player_id = player_id
     @week = week
     @year = year
-    @team = Team.find_by(espn_id: espn_team_id)
+    @score = score
+    @team = Team.find_by(sleeper_roster_id: sleeper_team_id)
   end
 
   def persist
-    player = Player.find_by(espn_id: @player['id'])
+    player = Player.find_by(sleeper_id: @player_id)
     stat = PlayerStat.find_or_initialize_by(player_id: player.to_param, season: @year, week: @week)
-    @player['stats'].each do |s|
-      if s['statSourceId'] == 0
-        stat.actual_total = s['appliedTotal']
-      elsif s['statSourceId'] == 1
-        stat.projected_total = s['appliedTotal']
-      end
-    end
+    stat.actual_total = @score
+    # stat.projected_total = s['appliedTotal']
     stat.team_id = @team.to_param
     stat.save
   end

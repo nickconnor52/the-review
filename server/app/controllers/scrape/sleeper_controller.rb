@@ -15,10 +15,18 @@ class Scrape::SleeperController < ScrapeController
 
   def sync_new_transactions
     # TODO: HANDLE THE TRANSACTION NUMBER AT THE END. INCREMENT SOMEHOW?
-    week = params[:week] || 2
-    response = HTTParty.get("#{league_url}/transactions/#{week}")
-    api_mapper = Mappers::ApiMapper.new(response)
-    error_messages = api_mapper.persist_transactions
+    week = params[:week] || 1
+    if week.nil?
+      [*1..18].each do |week|
+        response = HTTParty.get("#{league_url}/transactions/#{week}")
+        api_mapper = Mappers::ApiMapper.new(response)
+        error_messages = api_mapper.persist_transactions
+      end
+    else
+      response = HTTParty.get("#{league_url}/transactions/#{week}")
+      api_mapper = Mappers::ApiMapper.new(response)
+      error_messages = api_mapper.persist_transactions
+    end
     render :json => { success: true, error_messages: error_messages }
   end
 
@@ -26,14 +34,37 @@ class Scrape::SleeperController < ScrapeController
     # TODO: HANDLE NUMBER
     year = 2021
     week = 1
-    response = HTTParty.get("#{league_url}/matchups/#{1}")
-    api_mapper = Mappers::ApiMapper.new(response)
-    error_messages = api_mapper.persist_schedule(year, week)
+    if week.nil?
+      [*1..18].each do |week|
+        response = HTTParty.get("#{league_url}/matchups/#{week}")
+        api_mapper = Mappers::ApiMapper.new(response)
+        error_messages = api_mapper.persist_schedule(year, week)
+      end
+    else
+      response = HTTParty.get("#{league_url}/matchups/#{week}")
+      api_mapper = Mappers::ApiMapper.new(response)
+      error_messages = api_mapper.persist_schedule(year, week)
+    end
+
     render :json => { success: true, error_messages: error_messages }
   end
 
   def sync_player_stats
-    # TODO
+    year = 2021
+    week = params[:week]
+    if week.nil?
+      [*1..18].each do |week|
+        response = HTTParty.get("#{league_url}/matchups/#{week}")
+        api_mapper = Mappers::ApiMapper.new(response)
+        error_messages = api_mapper.persist_player_stats(year, week)
+      end
+    else
+      response = HTTParty.get("#{league_url}/matchups/#{week}")
+      api_mapper = Mappers::ApiMapper.new(response)
+      error_messages = api_mapper.persist_player_stats(year, week)
+    end
+    render :json => { success: true, error_messages: error_messages }
+
   end
 
   def sync_owners
