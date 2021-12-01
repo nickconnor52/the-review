@@ -17,8 +17,8 @@ class Scrape::SleeperController < ScrapeController
     # TODO: HANDLE THE TRANSACTION NUMBER AT THE END. INCREMENT SOMEHOW?
     week = params[:week]
     if week.nil?
-      [*1..18].each do |week|
-        response = HTTParty.get("#{league_url}/transactions/#{week}")
+      [*1..18].each do |w|
+        response = HTTParty.get("#{league_url}/transactions/#{w}")
         api_mapper = Mappers::ApiMapper.new(response)
         error_messages = api_mapper.persist_transactions
       end
@@ -35,8 +35,8 @@ class Scrape::SleeperController < ScrapeController
     year = 2021
     week = params[:week]
     if week.nil?
-      [*1..18].each do |week|
-        response = HTTParty.get("#{league_url}/matchups/#{week}")
+      [*1..18].each do |w|
+        response = HTTParty.get("#{league_url}/matchups/#{w}")
         api_mapper = Mappers::ApiMapper.new(response)
         error_messages = api_mapper.persist_schedule(year, week)
       end
@@ -53,10 +53,10 @@ class Scrape::SleeperController < ScrapeController
     year = 2021
     week = params[:week]
     if week.nil?
-      [*1..18].each do |week|
-        response = HTTParty.get("#{league_url}/matchups/#{week}")
+      [*1..18].each do |w|
+        response = HTTParty.get("#{league_url}/matchups/#{w}")
         api_mapper = Mappers::ApiMapper.new(response)
-        error_messages = api_mapper.persist_player_stats(year, week)
+        error_messages = api_mapper.persist_player_stats(year, w)
       end
     else
       response = HTTParty.get("#{league_url}/matchups/#{week}")
