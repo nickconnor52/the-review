@@ -42,7 +42,7 @@ class ScoresController < ApplicationController
       actual_scores[away_team_owner] = (actual_scores[away_team_owner] + game.away_score.to_f).round(2)
     end
 
-    render :json => { best_ball_score: team_scores, actual_total_score: actual_scores, season: 2020 }
+    render :json => { best_ball_score: team_scores, actual_total_score: actual_scores, season: 2021 }
   end
 
   private

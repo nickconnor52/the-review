@@ -15,7 +15,7 @@ class Scrape::SleeperController < ScrapeController
 
   def sync_new_transactions
     # TODO: HANDLE THE TRANSACTION NUMBER AT THE END. INCREMENT SOMEHOW?
-    week = params[:week] || 1
+    week = params[:week]
     if week.nil?
       [*1..18].each do |week|
         response = HTTParty.get("#{league_url}/transactions/#{week}")
@@ -33,7 +33,7 @@ class Scrape::SleeperController < ScrapeController
   def sync_schedule
     # TODO: HANDLE NUMBER
     year = 2021
-    week = 1
+    week = params[:week]
     if week.nil?
       [*1..18].each do |week|
         response = HTTParty.get("#{league_url}/matchups/#{week}")
