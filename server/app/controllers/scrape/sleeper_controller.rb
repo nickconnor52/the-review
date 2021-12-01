@@ -38,7 +38,7 @@ class Scrape::SleeperController < ScrapeController
       [*1..18].each do |w|
         response = HTTParty.get("#{league_url}/matchups/#{w}")
         api_mapper = Mappers::ApiMapper.new(response)
-        error_messages = api_mapper.persist_schedule(year, week)
+        error_messages = api_mapper.persist_schedule(year, w)
       end
     else
       response = HTTParty.get("#{league_url}/matchups/#{week}")
